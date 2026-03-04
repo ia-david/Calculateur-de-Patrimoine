@@ -31,9 +31,7 @@
 
     h1 { font-size: 24px; font-weight: 800; margin: 22px 0 6px; text-align: center; }
     p.intro { color: var(--muted); font-size: 13px; text-align: center; margin-bottom: 24px; }
-
     .wrap { max-width: 1000px; margin: 0 auto; padding: 0 16px 20px; }
-    
     .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: stretch; }
     @media (max-width: 850px) { .grid { grid-template-columns: 1fr; } }
 
@@ -59,7 +57,6 @@
     .input-field input { border: 0; outline: 0; width: 100%; font-size: 14px; font-weight: 700; background: transparent; }
 
     .col-right { display: flex; flex-direction: column; gap: 16px; }
-
     .result-box { text-align: center; }
     .net-value { font-size: 34px; font-weight: 800; margin: 10px 0; }
     .summary { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 12px 0; border-top: 1px dashed var(--border); padding-top: 12px; }
@@ -67,14 +64,10 @@
     .summary small { font-size: 9px; text-transform: uppercase; color: var(--muted); font-weight: 800; }
 
     .pedago { background: #fdf2f7; color: var(--muted); padding: 10px; border-radius: 10px; font-size: 11px; font-style: italic; margin-bottom: 10px; line-height: 1.4; }
-
     .btn-main { display: inline-block; width: 100%; padding: 12px; border-radius: 12px; border: none; font-weight: 800; font-size: 14px; cursor: pointer; transition: .2s ease; text-decoration: none; text-align: center; box-shadow: var(--shadow); }
     .btn-accent { background: var(--accent); color: #fff; margin-top: 5px; }
-    .btn-accent:hover { filter: brightness(1.05); transform: translateY(-1px); }
-
     .contact-link { display: block; text-align: center; margin: 20px auto 5px; }
     a.cta-final { text-decoration: none; background: var(--accent); color: #fff; padding: 12px 16px; border-radius: 12px; font-weight: 800; display: inline-block; font-size: 14px; }
-
     .ok { color: var(--ok); }
     .warn { color: var(--warn); }
     .ig { text-align: center; font-size: 11px; margin-top: 10px; }
@@ -91,65 +84,25 @@
       <div class="card">
         <div class="bar actif"></div>
         <h2><i data-lucide="plus-circle"></i> Vos Actifs</h2>
-        
-        <div class="input-row">
-          <label><i data-lucide="wallet"></i> Comptes bancaires</label>
-          <div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Comptes bancaires"></div>
-        </div>
-        <div class="input-row">
-          <label><i data-lucide="piggy-bank"></i> Livrets (LVA, LDDS, PEL, etc.)</label>
-          <div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Livrets"></div>
-        </div>
-        <div class="input-row">
-          <label><i data-lucide="line-chart"></i> Investissements (CTO, PEA, AV, PER)</label>
-          <div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Investissements"></div>
-        </div>
-        <div class="input-row">
-          <label><i data-lucide="coins"></i> Cryptomonnaie</label>
-          <div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Crypto"></div>
-        </div>
-        <div class="input-row">
-          <label><i data-lucide="building-2"></i> Immobilier</label>
-          <div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Immobilier"></div>
-        </div>
-        <div class="input-row">
-          <label><i data-lucide="briefcase"></i> Parts de société</label>
-          <div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Parts de société"></div>
-        </div>
-        <div class="input-row">
-          <label><i data-lucide="car-front"></i> Véhicules</label>
-          <div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Véhicules"></div>
-        </div>
-        <div class="input-row">
-          <label><i data-lucide="gem"></i> Objets de valeur</label>
-          <div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Objets de valeur"></div>
-        </div>
-        <div class="input-row">
-          <label><i data-lucide="plus"></i> Autres actifs</label>
-          <div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Autres actifs"></div>
-        </div>
+        <div class="input-row"><label><i data-lucide="wallet"></i> Comptes bancaires</label><div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Comptes bancaires"></div></div>
+        <div class="input-row"><label><i data-lucide="piggy-bank"></i> Livrets</label><div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Livrets"></div></div>
+        <div class="input-row"><label><i data-lucide="line-chart"></i> Investissements</label><div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Investissements"></div></div>
+        <div class="input-row"><label><i data-lucide="coins"></i> Cryptomonnaie</label><div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Crypto"></div></div>
+        <div class="input-row"><label><i data-lucide="building-2"></i> Immobilier</label><div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Immobilier"></div></div>
+        <div class="input-row"><label><i data-lucide="briefcase"></i> Parts de société</label><div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Parts de société"></div></div>
+        <div class="input-row"><label><i data-lucide="car-front"></i> Véhicules</label><div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Véhicules"></div></div>
+        <div class="input-row"><label><i data-lucide="gem"></i> Objets de valeur</label><div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Objets de valeur"></div></div>
+        <div class="input-row"><label><i data-lucide="plus"></i> Autres actifs</label><div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Autres actifs"></div></div>
       </div>
 
       <div class="col-right">
         <div class="card">
-          <div class="bar d-in-bar dette"></div>
+          <div class="bar dette"></div>
           <h2><i data-lucide="minus-circle"></i> Vos Dettes</h2>
-          <div class="input-row">
-            <label><i data-lucide="home"></i> Crédit immobilier (Restant dû)</label>
-            <div class="input-field"><span>€</span><input type="number" class="d-in" data-n="Crédit immobilier"></div>
-          </div>
-          <div class="input-row">
-            <label><i data-lucide="credit-card"></i> Crédit conso</label>
-            <div class="input-field"><span>€</span><input type="number" class="d-in" data-n="Crédit conso"></div>
-          </div>
-          <div class="input-row">
-            <label><i data-lucide="car"></i> Crédit auto</label>
-            <div class="input-field"><span>€</span><input type="number" class="d-in" data-n="Crédit auto"></div>
-          </div>
-          <div class="input-row">
-            <label><i data-lucide="alert-circle"></i> Autres dettes</label>
-            <div class="input-field"><span>€</span><input type="number" class="d-in" data-n="Autres dettes"></div>
-          </div>
+          <div class="input-row"><label><i data-lucide="home"></i> Crédit immobilier</label><div class="input-field"><span>€</span><input type="number" class="d-in" data-n="Crédit immobilier"></div></div>
+          <div class="input-row"><label><i data-lucide="credit-card"></i> Crédit conso</label><div class="input-field"><span>€</span><input type="number" class="d-in" data-n="Crédit conso"></div></div>
+          <div class="input-row"><label><i data-lucide="car"></i> Crédit auto</label><div class="input-field"><span>€</span><input type="number" class="d-in" data-n="Crédit auto"></div></div>
+          <div class="input-row"><label><i data-lucide="alert-circle"></i> Autres dettes</label><div class="input-field"><span>€</span><input type="number" class="d-in" data-n="Autres dettes"></div></div>
         </div>
 
         <div class="card result-box">
@@ -160,103 +113,85 @@
             <div><small>Brut</small><b id="vBrut">0 €</b></div>
             <div><small>Dettes</small><b id="vDette" class="warn">0 €</b></div>
           </div>
-          <p class="pedago">Le patrimoine brut = actifs avant emprunts.<br>Le patrimoine net = ce qui vous appartient vraiment.</p>
+          <p class="pedago">Le patrimoine net = ce qui vous appartient vraiment.</p>
           <button class="btn-main btn-accent" onclick="exportPDF()">Exporter en PDF</button>
-          <button style="background:none; border:none; color:var(--muted); font-size:10px; cursor:pointer; margin-top:10px; font-weight:600;" onclick="location.reload()">Réinitialiser les champs</button>
+          <button style="background:none; border:none; color:var(--muted); font-size:10px; cursor:pointer; margin-top:10px;" onclick="location.reload()">Réinitialiser</button>
         </div>
       </div>
     </div>
-
-    <div class="contact-link">
-      <a href="https://ig.me/m/secrets_de_banquiere" target="_blank" class="cta-final">Contactez‑moi pour aller plus loin</a>
-    </div>
-
+    
+    <div class="contact-link"><a href="https://ig.me/m/secrets_de_banquiere" target="_blank" class="cta-final">Contactez‑moi</a></div>
     <div class="ig"><a href="https://www.instagram.com/secrets_de_banquiere/" target="_blank">@secrets_de_banquiere</a></div>
   </div>
+
+  <div id="pdf-render" style="position: absolute; left: -9999px; top: -9999px;"></div>
 
   <script>
     lucide.createIcons();
     const aIn = document.querySelectorAll('.a-in');
     const dIn = document.querySelectorAll('.d-in');
-
-    function f(n) { return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(n); }
+    const f = (n) => new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(n);
 
     function calc() {
       let b=0, d=0;
       aIn.forEach(i => b += Number(i.value)||0);
       dIn.forEach(i => d += Number(i.value)||0);
-      let n = b - d;
-      vBrut.innerText = f(b);
-      vDette.innerText = f(d);
-      vNet.innerText = f(n);
-      vNet.className = 'net-value ' + (n>=0?'ok':'warn');
+      vBrut.innerText = f(b); vDette.innerText = f(d); vNet.innerText = f(b-d);
+      vNet.className = 'net-value ' + (b-d>=0?'ok':'warn');
     }
-
     [...aIn, ...dIn].forEach(i => i.addEventListener('input', calc));
 
     function exportPDF() {
       const date = new Date().toLocaleDateString('fr-FR');
-      const valNet = vNet.innerText;
-      const valBrut = vBrut.innerText;
-      const valDette = vDette.innerText;
-      const colorNet = vNet.classList.contains('ok') ? '#0f9d58' : '#d93025';
+      let listA = "", listD = "";
+      aIn.forEach(i => { if(Number(i.value)>0) listA += `<tr><td style="padding:5px; border-bottom:1px solid #eee;">${i.dataset.n}</td><td style="text-align:right; font-weight:bold;">${f(i.value)}</td></tr>`; });
+      dIn.forEach(i => { if(Number(i.value)>0) listD += `<tr><td style="padding:5px; border-bottom:1px solid #eee;">${i.dataset.n}</td><td style="text-align:right; font-weight:bold; color:#d93025;">${f(i.value)}</td></tr>`; });
 
-      let tableActifs = "";
-      aIn.forEach(i => { if(Number(i.value) > 0) tableActifs += `<tr><td style="padding:6px; border-bottom:1px solid #eee; color:#444;">${i.dataset.n}</td><td style="text-align:right; font-weight:bold; padding:6px; border-bottom:1px solid #eee;">${f(i.value)}</td></tr>`; });
-
-      let tableDettes = "";
-      dIn.forEach(i => { if(Number(i.value) > 0) tableDettes += `<tr><td style="padding:6px; border-bottom:1px solid #eee; color:#444;">${i.dataset.n}</td><td style="text-align:right; font-weight:bold; padding:6px; border-bottom:1px solid #eee;">${f(i.value)}</td></tr>`; });
-
-      // ON RECONSTRUIT UN HTML "PDF-ONLY" SANS GRILLES COMPLEXES
-      const content = `
-        <div style="font-family: Arial, sans-serif; padding: 20px; color: #17151f;">
-          <div style="text-align:center; margin-bottom:30px;">
-            <h1 style="color:#ef5da8; font-size:26px; margin:0;">Bilan de Patrimoine</h1>
-            <p style="color:#666; font-size:12px;">Secrets de Banquière • ${date}</p>
-          </div>
-
-          <div style="background:#fff5f9; border-radius:15px; padding:25px; text-align:center; border:1px solid #f0e4ef; margin-bottom:30px;">
-            <div style="font-size:11px; text-transform:uppercase; font-weight:bold; color:#68657a; letter-spacing:1px;">Mon Patrimoine Net</div>
-            <div style="font-size:38px; font-weight:bold; color:${colorNet}; margin:10px 0;">${valNet}</div>
-            <div style="margin-top:15px; padding-top:15px; border-top:1px dashed #d7c3ff; display:flex; justify-content:center; gap:40px;">
-               <div style="display:inline-block; margin:0 20px;">
-                 <small style="display:block; font-size:9px; color:#68657a;">ACTIFS BRUTS</small>
-                 <span style="font-weight:bold; font-size:16px;">${valBrut}</span>
-               </div>
-               <div style="display:inline-block; margin:0 20px;">
-                 <small style="display:block; font-size:9px; color:#68657a;">TOTAL DETTES</small>
-                 <span style="font-weight:bold; font-size:16px; color:#d93025;">${valDette}</span>
-               </div>
+      const html = `
+        <div style="font-family: Arial; padding: 30px; color: #17151f; width: 700px;">
+          <h1 style="color:#ef5da8; text-align:center;">Bilan de Patrimoine</h1>
+          <p style="text-align:center; color:#666;">Secrets de Banquière • ${date}</p>
+          <div style="background:#fff5f9; border:1px solid #f0e4ef; border-radius:15px; padding:25px; text-align:center; margin:20px 0;">
+            <div style="font-size:12px; font-weight:bold; color:#68657a;">PATRIMOINE NET</div>
+            <div style="font-size:40px; font-weight:800; color:${vNet.classList.contains('ok')?'#0f9d58':'#d93025'};">${vNet.innerText}</div>
+            <div style="margin-top:10px; border-top:1px dashed #ccc; padding-top:10px; font-size:14px;">
+              Brut: <b>${vBrut.innerText}</b> | Dettes: <b>${vDette.innerText}</b>
             </div>
           </div>
-
-          <div style="margin-bottom:20px;">
-            <h3 style="color:#ef5da8; font-size:14px; border-bottom:2px solid #bafce1; padding-bottom:5px;">DÉTAIL DES ACTIFS</h3>
-            <table width="100%" style="border-collapse:collapse; font-size:12px;">${tableActifs || '<tr><td style="color:#999; padding:10px;">Aucun actif saisi</td></tr>'}</table>
+          <table width="100%" style="font-size:13px; margin-top:20px;">
+            <tr>
+              <td width="48%" valign="top">
+                <h3 style="color:#ef5da8; border-bottom:2px solid #bafce1;">ACTIFS</h3>
+                <table width="100%">${listA || '<tr><td>Aucun</td></tr>'}</table>
+              </td>
+              <td width="4%"></td>
+              <td width="48%" valign="top">
+                <h3 style="color:#ef5da8; border-bottom:2px solid #ff9ca6;">DETTES</h3>
+                <table width="100%">${listD || '<tr><td>Aucune</td></tr>'}</table>
+              </td>
+            </tr>
+          </table>
+          <div style="margin-top:50px; text-align:center; font-size:11px; color:#999; border-top:1px solid #eee; padding-top:20px;">
+            Document généré par Secrets de Banquière - theleme.netlify.app
           </div>
+        </div>`;
 
-          <div style="margin-bottom:30px;">
-            <h3 style="color:#ef5da8; font-size:14px; border-bottom:2px solid #ff9ca6; padding-bottom:5px;">DÉTAIL DES DETTES</h3>
-            <table width="100%" style="border-collapse:collapse; font-size:12px;">${tableDettes || '<tr><td style="color:#999; padding:10px;">Aucune dette saisie</td></tr>'}</table>
-          </div>
-
-          <div style="background:#17151f; color:#fff; padding:20px; border-radius:10px; text-align:center; margin-top:40px;">
-            <div style="font-size:13px; margin-bottom:8px;">Optimisez vos finances avec @secrets_de_banquiere</div>
-            <div style="font-size:11px; color:#ef5da8; font-weight:bold;">Retrouvez ma méthode sur theleme.netlify.app</div>
-          </div>
-        </div>
-      `;
+      const renderZone = document.getElementById('pdf-render');
+      renderZone.innerHTML = html;
 
       const opt = {
         margin: 10,
         filename: `Patrimoine_${date}.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true, letterRendering: true },
+        html2canvas: { scale: 2, useCORS: true, logging: false },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
       };
 
-      // On génère à partir du texte (pur HTML) et non du DOM visible
-      html2pdf().from(content).set(opt).save();
+      // On attend 100ms que le navigateur "digère" le HTML injecté avant de capturer
+      setTimeout(() => {
+        html2pdf().from(renderZone).set(opt).save().then(() => {
+          renderZone.innerHTML = ""; // On nettoie après
+        });
+      }, 150);
     }
   </script>
 </body>
