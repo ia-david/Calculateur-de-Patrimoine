@@ -32,8 +32,8 @@
     h1 { font-size: 24px; font-weight: 800; margin: 22px 0 6px; text-align: center; }
     p.intro { color: var(--muted); font-size: 13px; text-align: center; margin-bottom: 24px; }
 
-    /* AJOUT DU PADDING POUR MOBILE (Correction bug affichage bas de page) */
-    .wrap { max-width: 1000px; margin: 0 auto; padding: 0 16px 100px; }
+    /* FIX MOBILE : On ajoute de l'espace en bas de la page */
+    .wrap { max-width: 1000px; margin: 0 auto; padding: 0 16px 80px; }
     
     .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: stretch; }
     
@@ -189,10 +189,8 @@
 
       pdfContent += `</table></div></div>
           
-          <div style="margin-top:40px; text-align:center;">
-            <a href="https://theleme.netlify.app/" style="display:inline-block; background-color:#ef5da8; color:#ffffff; padding:15px 25px; border-radius:12px; text-decoration:none; font-weight:800; font-size:14px;">
-              OPTIMISER MON PATRIMOINE →
-            </a>
+          <div style="text-align:center; margin-top:30px;">
+            <a href="https://theleme.netlify.app/" style="display:inline-block; background-color:#ef5da8; color:white; padding:12px 25px; border-radius:10px; text-decoration:none; font-weight:800; font-size:14px;">OPTIMISER MON PATRIMOINE →</a>
           </div>
         </div>`;
 
