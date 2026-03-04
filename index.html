@@ -182,103 +182,68 @@
   </div>
 
   <script>
-    const assetInputs = document.querySelectorAll('.asset-input');
-    const debtInputs = document.querySelectorAll('.debt-input');
-    const displayNet = document.getElementById('valNet');
-    const displayBrut = document.getElementById('valBrut');
-    const displayDettes = document.getElementById('valDettes');
+    lucide.createIcons();
+    const aIn = document.querySelectorAll('.a-in');
+    const dIn = document.querySelectorAll('.d-in');
 
-    function euro(n) {
-      return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(n);
+    function f(n) { return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(n); }
+
+    function calc() {
+      let b=0, d=0;
+      aIn.forEach(i => b += Number(i.value)||0);
+      dIn.forEach(i => d += Number(i.value)||0);
+      let n = b - d;
+      vBrut.innerText = f(b);
+      vDette.innerText = f(d);
+      vNet.innerText = f(n);
+      vNet.className = 'net-value ' + (n>=0?'ok':'warn');
     }
 
-    function calculate() {
-      let totalBrut = 0;
-      let totalDettes = 0;
-
-      assetInputs.forEach(i => totalBrut += Number(i.value) || 0);
-      debtInputs.forEach(i => totalDettes += Number(i.value) || 0);
-
-      const net = totalBrut - totalDettes;
-
-      displayBrut.innerText = euro(totalBrut);
-      displayDettes.innerText = euro(totalDettes);
-      displayNet.innerText = euro(net);
-      
-      displayNet.className = 'net-value ' + (net >= 0 ? 'ok' : 'warn');
-    }
-
-    [...assetInputs, ...debtInputs].forEach(input => {
-      input.addEventListener('input', calculate);
-    });
-
-    function resetAll() {
-      [...assetInputs, ...debtInputs].forEach(i => i.value = '');
-      calculate();
-    }
+    [...aIn, ...dIn].forEach(i => i.addEventListener('input', calc));
 
     function exportPDF() {
       const date = new Date().toLocaleDateString('fr-FR');
+      let pdfContent = `
+        <div style="font-family:sans-serif; padding:30px; color:#17151f;">
+          <center>
+            <h1 style="color:#ef5da8; margin:0;">Bilan de Patrimoine</h1>
+            <p style="color:#68657a; font-size:12px;">${date} • Secrets de Banquière</p>
+            <div style="background:#fff5f9; padding:20px; border-radius:15px; border:1px solid #f0e4ef; margin:20px 0;">
+                <p style="font-size:10px; text-transform:uppercase; margin:0;">Patrimoine Net Total</p>
+                <h2 style="font-size:32px; color:${vNet.classList.contains('ok')?'#0f9d58':'#d93025'}; margin:10px 0;">${vNet.innerText}</h2>
+                <p style="border-top:1px dashed #ccc; padding-top:10px; font-size:12px;">
+                    Brut: <b>${vBrut.innerText}</b> | Dettes: <b>${vDette.innerText}</b>
+                </p>
+            </div>
+          </center>
+          <div style="display:flex; gap:20px;">
+            <div style="flex:1;">
+                <h3 style="color:#ef5da8; border-bottom:1px solid #eee; font-size:14px;">ACTIFS</h3>
+                <table width="100%" style="font-size:11px;">`;
       
-      let actifsHTML = "";
-      assetInputs.forEach(i => {
-        if(i.value > 0) actifsHTML += `<tr><td style="padding:8px 0; border-bottom:1px solid #f0e4ef">${i.dataset.name}</td><td style="text-align:right; font-weight:700">${euro(i.value)}</td></tr>`;
-      });
+      aIn.forEach(i => { if(i.value > 0) pdfContent += `<tr><td style="padding:4px 0;">${i.dataset.n}</td><td align="right"><b>${f(i.value)}</b></td></tr>`; });
 
-      let dettesHTML = "";
-      debtInputs.forEach(i => {
-        if(i.value > 0) dettesHTML += `<tr><td style="padding:8px 0; border-bottom:1px solid #f0e4ef">${i.dataset.name}</td><td style="text-align:right; font-weight:700">${euro(i.value)}</td></tr>`;
-      });
+      pdfContent += `</table></div><div style="flex:1;">
+                <h3 style="color:#ef5da8; border-bottom:1px solid #eee; font-size:14px;">DETTES</h3>
+                <table width="100%" style="font-size:11px;">`;
 
-      const element = document.createElement('div');
-      element.innerHTML = `
-        <div style="font-family: 'Inter', sans-serif; padding: 20px; color: #17151f;">
-          <div style="text-align:center; margin-bottom: 30px;">
-            <h1 style="color: #ef5da8; margin-bottom:5px;">Bilan de Patrimoine</h1>
-            <p style="color: #68657a; font-size: 14px;">Généré le ${date} par Secrets de Banquière</p>
+      dIn.forEach(i => { if(i.value > 0) pdfContent += `<tr><td style="padding:4px 0;">${i.dataset.n}</td><td align="right"><b>${f(i.value)}</b></td></tr>`; });
+
+      pdfContent += `</table></div></div>
+          <div style="margin-top:30px; padding:15px; background:#17151f; color:#fff; border-radius:10px; text-align:center; font-size:12px;">
+            Optimisez vos finances avec @secrets_de_banquiere
           </div>
-
-          <div style="background: #fff5f9; padding: 25px; border-radius: 15px; margin-bottom: 30px; border: 1px solid #f0e4ef; text-align:center;">
-            <p style="text-transform:uppercase; font-size:11px; letter-spacing:1px; margin:0; color:#68657a">Votre Patrimoine Net</p>
-            <h2 style="font-size: 32px; margin: 10px 0; color: ${displayNet.classList.contains('ok') ? '#0f9d58' : '#d93025'}">${displayNet.innerText}</h2>
-            <div style="display: flex; justify-content: space-around; margin-top: 15px; border-top: 1px dashed #f0e4ef; padding-top: 15px;">
-              <div><p style="font-size:10px; margin:0; color:#68657a">ACTIFS (BRUT)</p><p style="font-weight:700; margin:0">${displayBrut.innerText}</p></div>
-              <div><p style="font-size:10px; margin:0; color:#68657a">DETTES</p><p style="font-weight:700; margin:0; color:#d93025">${displayDettes.innerText}</p></div>
-            </div>
-          </div>
-
-          <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 40px;">
-            <div>
-              <h3 style="font-size:14px; text-transform:uppercase; color:#ef5da8">Détail des Actifs</h3>
-              <table style="width:100%; font-size:13px; border-collapse: collapse;">
-                ${actifsHTML || '<tr><td>Aucun actif</td></tr>'}
-              </table>
-            </div>
-            <div>
-              <h3 style="font-size:14px; text-transform:uppercase; color:#ef5da8">Détail des Dettes</h3>
-              <table style="width:100%; font-size:13px; border-collapse: collapse;">
-                ${dettesHTML || '<tr><td>Aucune dette</td></tr>'}
-              </table>
-            </div>
-          </div>
-
-          <div style="margin-top: 50px; text-align:center; font-size: 11px; color: #68657a; border-top: 1px solid #f0e4ef; padding-top: 20px;">
-            Retrouvez tous mes simulateurs sur @secrets_de_banquiere
-          </div>
-        </div>
-      `;
+        </div>`;
 
       const opt = {
         margin: 10,
-        filename: `Patrimoine_Net_${date}.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
+        filename: `Patrimoine_${date}.pdf`,
         html2canvas: { scale: 2 },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
       };
 
-      html2pdf().set(opt).from(element).save();
+      html2pdf().from(pdfContent).set(opt).save();
     }
   </script>
 </body>
 </html>
-
