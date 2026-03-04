@@ -165,7 +165,7 @@
             <div><small>Brut</small><b id="vBrut">0 €</b></div>
             <div><small>Dettes</small><b id="vDette" class="warn">0 €</b></div>
           </div>
-          <p class="pedago">Le brut = actifs avant emprunts.<br>Le net = ce qui vous appartient vraiment.</p>
+          <p class="pedago">Le patrimoine net = ce qui vous appartient vraiment.</p>
           
           <button class="btn-main btn-accent btn-pdf" onclick="exportPDF()">Exporter en PDF</button>
           
@@ -230,9 +230,9 @@
       dIn.forEach(i => { if(i.value > 0) pdfContent += `<tr><td style="padding:4px 0;">${i.dataset.n}</td><td align="right"><b>${f(i.value)}</b></td></tr>`; });
 
       pdfContent += `</table></div></div>
-          <div style="margin-top:30px; padding:15px; background:#17151f; color:#fff; border-radius:10px; text-align:center; font-size:12px;">
-            <a href="https://theleme.netlify.app/" target="_blank">Optimisez vos finances avec @secrets_de_banquiere</a> 
-          </div>
+		  
+		  <a href="https://theleme.netlify.app/" target="_blank">Optimisez vos finances avec @secrets_de_banquiere</a> 
+		  
         </div>`;
 
       const opt = {
