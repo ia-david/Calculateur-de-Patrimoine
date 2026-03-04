@@ -79,14 +79,11 @@
     .warn { color: var(--warn); }
     .ig { text-align: center; font-size: 11px; margin-top: 10px; }
     .ig a { color: var(--text); text-decoration: none; font-weight: 700; }
-
-    /* Utile pour masquer les boutons sur le PDF */
-    .no-pdf { display: block; }
   </style>
 </head>
 
 <body>
-  <div class="wrap" id="main-content">
+  <div class="wrap">
     <h1>Mon Patrimoine Net</h1>
     <p class="intro">Faites l'inventaire de vos actifs et de vos dettes pour connaître votre richesse réelle.</p>
 
@@ -164,17 +161,17 @@
             <div><small>Dettes</small><b id="vDette" class="warn">0 €</b></div>
           </div>
           <p class="pedago">Le patrimoine brut = actifs avant emprunts.<br>Le patrimoine net = ce qui vous appartient vraiment.</p>
-          <button class="btn-main btn-accent no-pdf" id="btn-export" onclick="exportPDF()">Exporter en PDF</button>
-          <button style="background:none; border:none; color:var(--muted); font-size:10px; cursor:pointer; margin-top:10px; font-weight:600;" class="no-pdf" onclick="location.reload()">Réinitialiser les champs</button>
+          <button class="btn-main btn-accent" onclick="exportPDF()">Exporter en PDF</button>
+          <button style="background:none; border:none; color:var(--muted); font-size:10px; cursor:pointer; margin-top:10px; font-weight:600;" onclick="location.reload()">Réinitialiser les champs</button>
         </div>
       </div>
     </div>
 
-    <div class="contact-link no-pdf">
+    <div class="contact-link">
       <a href="https://ig.me/m/secrets_de_banquiere" target="_blank" class="cta-final">Contactez‑moi pour aller plus loin</a>
     </div>
 
-    <div class="ig no-pdf"><a href="https://www.instagram.com/secrets_de_banquiere/" target="_blank">@secrets_de_banquiere</a></div>
+    <div class="ig"><a href="https://www.instagram.com/secrets_de_banquiere/" target="_blank">@secrets_de_banquiere</a></div>
   </div>
 
   <script>
@@ -198,37 +195,68 @@
     [...aIn, ...dIn].forEach(i => i.addEventListener('input', calc));
 
     function exportPDF() {
-      const element = document.getElementById('main-content');
-      const btn = document.getElementById('btn-export');
-      const date = new Date().toLocaleDateString('fr-FR').replace(/\//g,'-');
+      const date = new Date().toLocaleDateString('fr-FR');
+      const valNet = vNet.innerText;
+      const valBrut = vBrut.innerText;
+      const valDette = vDette.innerText;
+      const colorNet = vNet.classList.contains('ok') ? '#0f9d58' : '#d93025';
 
-      // On cache les éléments inutiles pour le PDF
-      const noPdfElements = document.querySelectorAll('.no-pdf');
-      noPdfElements.forEach(el => el.style.display = 'none');
-      
-      // On réduit un peu la taille du titre pour que ça rentre bien sur mobile
-      const title = document.querySelector('h1');
-      title.style.fontSize = '20px';
+      let tableActifs = "";
+      aIn.forEach(i => { if(Number(i.value) > 0) tableActifs += `<tr><td style="padding:6px; border-bottom:1px solid #eee; color:#444;">${i.dataset.n}</td><td style="text-align:right; font-weight:bold; padding:6px; border-bottom:1px solid #eee;">${f(i.value)}</td></tr>`; });
+
+      let tableDettes = "";
+      dIn.forEach(i => { if(Number(i.value) > 0) tableDettes += `<tr><td style="padding:6px; border-bottom:1px solid #eee; color:#444;">${i.dataset.n}</td><td style="text-align:right; font-weight:bold; padding:6px; border-bottom:1px solid #eee;">${f(i.value)}</td></tr>`; });
+
+      // ON RECONSTRUIT UN HTML "PDF-ONLY" SANS GRILLES COMPLEXES
+      const content = `
+        <div style="font-family: Arial, sans-serif; padding: 20px; color: #17151f;">
+          <div style="text-align:center; margin-bottom:30px;">
+            <h1 style="color:#ef5da8; font-size:26px; margin:0;">Bilan de Patrimoine</h1>
+            <p style="color:#666; font-size:12px;">Secrets de Banquière • ${date}</p>
+          </div>
+
+          <div style="background:#fff5f9; border-radius:15px; padding:25px; text-align:center; border:1px solid #f0e4ef; margin-bottom:30px;">
+            <div style="font-size:11px; text-transform:uppercase; font-weight:bold; color:#68657a; letter-spacing:1px;">Mon Patrimoine Net</div>
+            <div style="font-size:38px; font-weight:bold; color:${colorNet}; margin:10px 0;">${valNet}</div>
+            <div style="margin-top:15px; padding-top:15px; border-top:1px dashed #d7c3ff; display:flex; justify-content:center; gap:40px;">
+               <div style="display:inline-block; margin:0 20px;">
+                 <small style="display:block; font-size:9px; color:#68657a;">ACTIFS BRUTS</small>
+                 <span style="font-weight:bold; font-size:16px;">${valBrut}</span>
+               </div>
+               <div style="display:inline-block; margin:0 20px;">
+                 <small style="display:block; font-size:9px; color:#68657a;">TOTAL DETTES</small>
+                 <span style="font-weight:bold; font-size:16px; color:#d93025;">${valDette}</span>
+               </div>
+            </div>
+          </div>
+
+          <div style="margin-bottom:20px;">
+            <h3 style="color:#ef5da8; font-size:14px; border-bottom:2px solid #bafce1; padding-bottom:5px;">DÉTAIL DES ACTIFS</h3>
+            <table width="100%" style="border-collapse:collapse; font-size:12px;">${tableActifs || '<tr><td style="color:#999; padding:10px;">Aucun actif saisi</td></tr>'}</table>
+          </div>
+
+          <div style="margin-bottom:30px;">
+            <h3 style="color:#ef5da8; font-size:14px; border-bottom:2px solid #ff9ca6; padding-bottom:5px;">DÉTAIL DES DETTES</h3>
+            <table width="100%" style="border-collapse:collapse; font-size:12px;">${tableDettes || '<tr><td style="color:#999; padding:10px;">Aucune dette saisie</td></tr>'}</table>
+          </div>
+
+          <div style="background:#17151f; color:#fff; padding:20px; border-radius:10px; text-align:center; margin-top:40px;">
+            <div style="font-size:13px; margin-bottom:8px;">Optimisez vos finances avec @secrets_de_banquiere</div>
+            <div style="font-size:11px; color:#ef5da8; font-weight:bold;">Retrouvez ma méthode sur theleme.netlify.app</div>
+          </div>
+        </div>
+      `;
 
       const opt = {
-        margin: [10, 5, 10, 5],
+        margin: 10,
         filename: `Patrimoine_${date}.pdf`,
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { 
-            scale: 2, 
-            useCORS: true,
-            logging: false,
-            letterRendering: true
-        },
+        html2canvas: { scale: 2, useCORS: true, letterRendering: true },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
       };
 
-      // Exécution de l'export
-      html2pdf().set(opt).from(element).save().then(() => {
-        // Une fois fini, on réaffiche tout
-        noPdfElements.forEach(el => el.style.display = 'block');
-        title.style.fontSize = '24px';
-      });
+      // On génère à partir du texte (pur HTML) et non du DOM visible
+      html2pdf().from(content).set(opt).save();
     }
   </script>
 </body>
