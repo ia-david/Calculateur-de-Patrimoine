@@ -199,88 +199,58 @@
       const valNet = vNet.innerText;
       const colorNet = vNet.classList.contains('ok') ? '#0f9d58' : '#d93025';
       
-      const element = document.createElement('div');
-      // On le rend invisible mais présent dans le DOM pour le moteur PDF
-      element.style.position = 'fixed';
-      element.style.left = '-9999px';
-      element.style.top = '0';
-      element.style.width = "550px"; 
-      element.style.background = "#ffffff";
-      element.style.padding = "20px";
+      // On crée un HTML simple et propre
+      let listActifs = "";
+      aIn.forEach(i => { if(Number(i.value) > 0) listActifs += `<tr><td style="padding:4px; border-bottom:1px solid #eee;">• ${i.dataset.n}</td><td style="text-align:right; font-weight:bold; border-bottom:1px solid #eee;">${f(i.value)}</td></tr>`; });
       
-      let tableActifs = "";
-      aIn.forEach(i => { 
-        if(Number(i.value) > 0) {
-          tableActifs += `<tr><td style="padding:5px; color:#666; border-bottom:1px solid #f9f9f9;">• ${i.dataset.n}</td><td style="text-align:right; font-weight:bold; border-bottom:1px solid #f9f9f9;">${f(i.value)}</td></tr>`;
-        }
-      });
+      let listDettes = "";
+      dIn.forEach(i => { if(Number(i.value) > 0) listDettes += `<tr><td style="padding:4px; border-bottom:1px solid #eee;">• ${i.dataset.n}</td><td style="text-align:right; font-weight:bold; border-bottom:1px solid #eee;">${f(i.value)}</td></tr>`; });
 
-      let tableDettes = "";
-      dIn.forEach(i => { 
-        if(Number(i.value) > 0) {
-          tableDettes += `<tr><td style="padding:5px; color:#666; border-bottom:1px solid #f9f9f9;">• ${i.dataset.n}</td><td style="text-align:right; font-weight:bold; border-bottom:1px solid #f9f9f9;">${f(i.value)}</td></tr>`;
-        }
-      });
-
-      element.innerHTML = `
-        <div style="font-family:Arial, sans-serif;">
-          <div style="text-align:center; margin-bottom:20px;">
-            <h1 style="color:#ef5da8; font-size:24px; margin:0;">Bilan de Patrimoine</h1>
-            <p style="color:#666; font-size:12px;">Secrets de Banquière - ${date}</p>
-          </div>
-
-          <div style="background-color:#fff5f9; border:1px solid #f0e4ef; border-radius:10px; padding:20px; margin-bottom:20px; text-align:center;">
-            <div style="font-size:10px; color:#666; text-transform:uppercase; font-weight:bold;">Patrimoine Net Total</div>
-            <div style="font-size:36px; font-weight:bold; color:${colorNet}; margin:10px 0; text-align:center; width:100%;">${valNet}</div>
+      const pdfHtml = `
+        <div style="font-family: Arial, sans-serif; color: #17151f; padding: 20px;">
+          <center>
+            <h1 style="color:#ef5da8; margin-bottom:5px;">Bilan Patrimoine</h1>
+            <p style="color:#666; font-size:12px; margin-bottom:20px;">Secrets de Banquière - ${date}</p>
             
-            <table width="100%" style="border-top:1px dashed #ccc; margin-top:10px;">
-              <tr>
-                <td align="center" style="padding-top:10px; width:50%;">
-                  <div style="font-size:9px; color:#666;">BRUT</div>
-                  <div style="font-weight:bold;">${vBrut.innerText}</div>
-                </td>
-                <td align="center" style="padding-top:10px; width:50%;">
-                  <div style="font-size:9px; color:#666;">DETTES</div>
-                  <div style="font-weight:bold; color:#d93025;">${vDette.innerText}</div>
-                </td>
-              </tr>
-            </table>
-          </div>
+            <div style="background:#fff5f9; border:1px solid #f0e4ef; border-radius:10px; padding:20px; margin-bottom:20px;">
+              <small style="text-transform:uppercase; font-size:10px; font-weight:bold; color:#666;">Patrimoine Net Total</small>
+              <div style="font-size:32px; font-weight:800; color:${colorNet}; margin:10px 0;">${valNet}</div>
+              <div style="font-size:12px; border-top:1px dashed #ccc; padding-top:10px;">
+                Brut: <b>${vBrut.innerText}</b> | Dettes: <b style="color:#d93025;">${vDette.innerText}</b>
+              </div>
+            </div>
+          </center>
 
-          <table width="100%" cellspacing="0" cellpadding="0" style="table-layout: fixed;">
+          <table width="100%" style="font-size:12px;">
             <tr>
               <td width="48%" valign="top">
-                <div style="font-size:12px; font-weight:bold; color:#ef5da8; border-bottom:2px solid #bafce1; margin-bottom:10px; padding-bottom:5px; text-align:center;">VOS ACTIFS</div>
-                <table width="100%" style="font-size:11px; border-collapse:collapse;">${tableActifs || '<tr><td style="color:#999;font-style:italic;text-align:center;">Aucun actif saisi</td></tr>'}</table>
+                <h3 style="color:#ef5da8; border-bottom:2px solid #bafce1; padding-bottom:5px;">ACTIFS</h3>
+                <table width="100%">${listActifs || '<tr><td>Aucun</td></tr>'}</table>
               </td>
               <td width="4%"></td>
               <td width="48%" valign="top">
-                <div style="font-size:12px; font-weight:bold; color:#ef5da8; border-bottom:2px solid #ff9ca6; margin-bottom:10px; padding-bottom:5px; text-align:center;">VOS DETTES</div>
-                <table width="100%" style="font-size:11px; border-collapse:collapse;">${tableDettes || '<tr><td style="color:#999;font-style:italic;text-align:center;">Aucune dette saisie</td></tr>'}</table>
+                <h3 style="color:#ef5da8; border-bottom:2px solid #ff9ca6; padding-bottom:5px;">DETTES</h3>
+                <table width="100%">${listDettes || '<tr><td>Aucune</td></tr>'}</table>
               </td>
             </tr>
           </table>
 
-          <div style="margin-top:40px; background-color:#17151f; color:#ffffff; padding:20px; border-radius:10px; text-align:center;">
-            <div style="font-size:13px; margin-bottom:10px;">Optimisez vos finances avec ma méthode 5/15</div>
-            <a href="https://theleme.netlify.app/" style="color:#ef5da8; font-weight:bold; font-size:15px; text-decoration:none;">Découvrir la méthode →</a>
+          <div style="margin-top:40px; text-align:center; background:#17151f; color:#fff; padding:15px; border-radius:8px;">
+            <p style="margin:0; font-size:12px;">Optimisez vos finances avec @secrets_de_banquiere</p>
           </div>
         </div>
       `;
 
-      document.body.appendChild(element); // Important pour l'ouverture sur mobile
-
+      // CONFIGURATION PDF STANDARD SANS DOM APPEND (PLUS STABLE)
       const opt = {
         margin: 10,
-        filename: `Patrimoine_${date.replace(/\//g,'-')}.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true, letterRendering: true },
+        filename: `Patrimoine_${date}.pdf`,
+        html2canvas: { scale: 2 },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
       };
 
-      html2pdf().set(opt).from(element).save().then(() => {
-        document.body.removeChild(element); // On nettoie après l'export
-      });
+      // Exécution directe
+      html2pdf().from(pdfHtml).set(opt).save();
     }
   </script>
 </body>
