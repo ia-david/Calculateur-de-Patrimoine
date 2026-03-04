@@ -35,7 +35,12 @@
     .wrap { max-width: 1000px; margin: 0 auto; padding: 0 16px 20px; }
     
     .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: stretch; }
-    @media (max-width: 850px) { .grid { grid-template-columns: 1fr; } }
+    
+    /* GESTION MOBILE : Masquer le bouton PDF */
+    @media (max-width: 850px) { 
+      .grid { grid-template-columns: 1fr; }
+      .btn-pdf { display: none !important; } 
+    }
 
     .card { 
       background: var(--card); border: 1px solid var(--border); border-radius: 16px; 
@@ -79,15 +84,6 @@
     .warn { color: var(--warn); }
     .ig { text-align: center; font-size: 11px; margin-top: 10px; }
     .ig a { color: var(--text); text-decoration: none; font-weight: 700; }
-
-    /* Zone technique pour éviter la page blanche */
-    #pdf-temp-container {
-      position: absolute;
-      left: -9999px;
-      top: 0;
-      width: 800px; /* Largeur fixe pour un rendu propre */
-      background: white;
-    }
   </style>
 </head>
 
@@ -141,7 +137,7 @@
 
       <div class="col-right">
         <div class="card">
-          <div class="bar d-in-bar dette"></div>
+          <div class="bar dette"></div>
           <h2><i data-lucide="minus-circle"></i> Vos Dettes</h2>
           <div class="input-row">
             <label><i data-lucide="home"></i> Crédit immobilier (Restant dû)</label>
@@ -169,8 +165,10 @@
             <div><small>Brut</small><b id="vBrut">0 €</b></div>
             <div><small>Dettes</small><b id="vDette" class="warn">0 €</b></div>
           </div>
-          <p class="pedago">Le patrimoine brut = actifs avant emprunts.<br>Le patrimoine net = ce qui vous appartient vraiment.</p>
-          <button class="btn-main btn-accent" onclick="exportPDF()">Exporter en PDF</button>
+          <p class="pedago">Le patrimoine net = ce qui vous appartient vraiment.</p>
+          
+          <button class="btn-main btn-accent btn-pdf" onclick="exportPDF()">Exporter en PDF</button>
+          
           <button style="background:none; border:none; color:var(--muted); font-size:10px; cursor:pointer; margin-top:10px; font-weight:600;" onclick="location.reload()">Réinitialiser les champs</button>
         </div>
       </div>
@@ -182,8 +180,6 @@
 
     <div class="ig"><a href="https://www.instagram.com/secrets_de_banquiere/" target="_blank">@secrets_de_banquiere</a></div>
   </div>
-
-  <div id="pdf-temp-container"></div>
 
   <script>
     lucide.createIcons();
@@ -207,66 +203,46 @@
 
     function exportPDF() {
       const date = new Date().toLocaleDateString('fr-FR');
-      const valNet = vNet.innerText;
-      const colorNet = vNet.classList.contains('ok') ? '#0f9d58' : '#d93025';
-      
-      let listActifs = "";
-      aIn.forEach(i => { if(Number(i.value) > 0) listActifs += `<tr><td style="padding:6px; border-bottom:1px solid #eee;">• ${i.dataset.n}</td><td style="text-align:right; font-weight:bold; border-bottom:1px solid #eee;">${f(i.value)}</td></tr>`; });
-      
-      let listDettes = "";
-      dIn.forEach(i => { if(Number(i.value) > 0) listDettes += `<tr><td style="padding:6px; border-bottom:1px solid #eee;">• ${i.dataset.n}</td><td style="text-align:right; font-weight:bold; border-bottom:1px solid #eee;">${f(i.value)}</td></tr>`; });
-
-      // On injecte le contenu dans le conteneur masqué
-      const container = document.getElementById('pdf-temp-container');
-      container.innerHTML = `
-        <div style="padding: 40px; background: white;">
-          <div style="text-align:center;">
-            <h1 style="color:#ef5da8; margin:0; font-size:28px;">Bilan de Patrimoine</h1>
-            <p style="color:#666; font-size:12px;">Secrets de Banquière • ${date}</p>
-          </div>
-          
-          <div style="background:#fff5f9; border:1px solid #f0e4ef; border-radius:12px; padding:30px; text-align:center; margin:30px 0;">
-            <div style="font-size:11px; font-weight:bold; color:#68657a; text-transform:uppercase; letter-spacing:1px;">Mon Patrimoine Net</div>
-            <div style="font-size:42px; font-weight:bold; color:${colorNet}; margin:10px 0;">${valNet}</div>
-            <div style="border-top:1px dashed #ccc; margin-top:15px; padding-top:15px; font-size:14px;">
-              Brut : <b>${vBrut.innerText}</b> | Dettes : <b style="color:#d93025;">${vDette.innerText}</b>
+      let pdfContent = `
+        <div style="font-family:sans-serif; padding:30px; color:#17151f;">
+          <center>
+            <h1 style="color:#ef5da8; margin:0;">Bilan de Patrimoine</h1>
+            <p style="color:#68657a; font-size:12px;">${date} • Secrets de Banquière</p>
+            <div style="background:#fff5f9; padding:20px; border-radius:15px; border:1px solid #f0e4ef; margin:20px 0;">
+                <p style="font-size:10px; text-transform:uppercase; margin:0;">Patrimoine Net Total</p>
+                <h2 style="font-size:32px; color:${vNet.classList.contains('ok')?'#0f9d58':'#d93025'}; margin:10px 0;">${vNet.innerText}</h2>
+                <p style="border-top:1px dashed #ccc; padding-top:10px; font-size:12px;">
+                    Brut: <b>${vBrut.innerText}</b> | Dettes: <b>${vDette.innerText}</b>
+                </p>
             </div>
-          </div>
+          </center>
+          <div style="display:flex; gap:20px;">
+            <div style="flex:1;">
+                <h3 style="color:#ef5da8; border-bottom:1px solid #eee; font-size:14px;">ACTIFS</h3>
+                <table width="100%" style="font-size:11px;">`;
+      
+      aIn.forEach(i => { if(i.value > 0) pdfContent += `<tr><td style="padding:4px 0;">${i.dataset.n}</td><td align="right"><b>${f(i.value)}</b></td></tr>`; });
 
-          <table width="100%" style="font-size:13px; border-collapse:collapse;">
-            <tr>
-              <td width="48%" valign="top">
-                <h3 style="color:#ef5da8; border-bottom:2px solid #bafce1; padding-bottom:5px; margin-top:0;">DÉTAIL ACTIFS</h3>
-                <table width="100%" style="border-collapse:collapse;">${listActifs || '<tr><td>Aucun actif</td></tr>'}</table>
-              </td>
-              <td width="4%"></td>
-              <td width="48%" valign="top">
-                <h3 style="color:#ef5da8; border-bottom:2px solid #ff9ca6; padding-bottom:5px; margin-top:0;">DÉTAIL DETTES</h3>
-                <table width="100%" style="border-collapse:collapse;">${listDettes || '<tr><td>Aucune dette</td></tr>'}</table>
-              </td>
-            </tr>
-          </table>
+      pdfContent += `</table></div><div style="flex:1;">
+                <h3 style="color:#ef5da8; border-bottom:1px solid #eee; font-size:14px;">DETTES</h3>
+                <table width="100%" style="font-size:11px;">`;
 
-          <div style="margin-top:60px; text-align:center; background:#17151f; color:white; padding:20px; border-radius:10px;">
-            <p style="margin:0; font-size:13px;">Prenez le contrôle de votre argent avec @secrets_de_banquiere</p>
+      dIn.forEach(i => { if(i.value > 0) pdfContent += `<tr><td style="padding:4px 0;">${i.dataset.n}</td><td align="right"><b>${f(i.value)}</b></td></tr>`; });
+
+      pdfContent += `</table></div></div>
+          <div style="margin-top:30px; padding:15px; background:#17151f; color:#fff; border-radius:10px; text-align:center; font-size:12px;">
+            Optimisez vos finances avec @secrets_de_banquiere
           </div>
-        </div>
-      `;
+        </div>`;
 
       const opt = {
-        margin: 0,
+        margin: 10,
         filename: `Patrimoine_${date}.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true, letterRendering: true },
+        html2canvas: { scale: 2 },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
       };
 
-      // LA CLÉ : On attend 200ms que le navigateur "peigne" le container avant de lancer html2pdf
-      setTimeout(() => {
-        html2pdf().from(container).set(opt).save().then(() => {
-          container.innerHTML = ""; // On vide après
-        });
-      }, 200);
+      html2pdf().from(pdfContent).set(opt).save();
     }
   </script>
 </body>
