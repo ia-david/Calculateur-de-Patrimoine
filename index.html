@@ -3,8 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-  <title>Secrets de banquière - Patrimoine Net</title>
+  <title>Secrets de banquière - Calculateur de Patrimoine Net</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
   
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -14,7 +15,7 @@
     :root {
       --bg: #fff5f9; --card: #ffffff; --text: #17151f; --muted: #68657a;
       --accent: #ef5da8; --border: #f0e4ef; --ok: #0f9d58; --warn: #d93025;
-      --shadow: 0 10px 30px rgba(35, 10, 30, .06);
+      --shadow: 0 10px 30px rgba(35, 10, 30, .06); --shadow-strong: 0 14px 34px rgba(35, 10, 30, .10);
       --font: 'Inter', sans-serif;
       --c-actif: #bafce1; --c-dette: #ff9ca6; --c-net: #d7c3ff;
     }
@@ -31,17 +32,14 @@
     h1 { font-size: 24px; font-weight: 800; margin: 22px 0 6px; text-align: center; }
     p.intro { color: var(--muted); font-size: 13px; text-align: center; margin-bottom: 24px; }
 
-    /* Correction Mobile : Padding pour éviter que le dernier champ soit coupé */
-    .wrap { max-width: 1000px; margin: 0 auto; padding: 0 16px 80px; }
+    /* AJOUT DU PADDING POUR MOBILE (Correction bug affichage bas de page) */
+    .wrap { max-width: 1000px; margin: 0 auto; padding: 0 16px 100px; }
     
     .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: stretch; }
     
-    .btn-mobile { display: none; background: #17151f !important; color: white !important; }
-
     @media (max-width: 850px) { 
       .grid { grid-template-columns: 1fr; }
       .btn-pdf { display: none !important; } 
-      .btn-mobile { display: inline-block !important; }
     }
 
     .card { 
@@ -54,11 +52,18 @@
     .bar.dette { background: var(--c-dette); }
     .bar.net { background: var(--c-net); }
     
-    h2 { font-size: 16px; margin: 6px 0 18px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    h2 { font-size: 16px; margin: 6px 0 18px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 8px; text-transform: none; text-align: center; }
+    h2 i { width: 14px; height: 14px; stroke-width: 2.5px; }
+
     .input-row { margin-bottom: 12px; }
-    .input-row label { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 800; color: var(--muted); margin-bottom: 4px; text-transform: uppercase; }
+    .input-row label { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 800; color: var(--muted); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.3px; }
+    .input-row i { color: #a28abf; width: 10px; height: 10px; stroke-width: 2.5px; }
+    
     .input-field { display: flex; align-items: center; gap: 8px; border: 1px solid var(--border); border-radius: 10px; padding: 8px 12px; background: #fff; box-shadow: var(--shadow); }
+    .input-field span { color: #a28abf; font-weight: 600; font-size: 14px; }
     .input-field input { border: 0; outline: 0; width: 100%; font-size: 14px; font-weight: 700; background: transparent; }
+
+    .col-right { display: flex; flex-direction: column; gap: 16px; }
 
     .result-box { text-align: center; }
     .net-value { font-size: 34px; font-weight: 800; margin: 10px 0; }
@@ -66,8 +71,11 @@
     .summary b { display: block; font-size: 15px; }
     .summary small { font-size: 9px; text-transform: uppercase; color: var(--muted); font-weight: 800; }
 
-    .btn-main { display: inline-block; width: 100%; padding: 14px; border-radius: 12px; border: none; font-weight: 800; font-size: 14px; cursor: pointer; transition: .2s ease; text-decoration: none; text-align: center; }
-    .btn-accent { background: var(--accent); color: #fff; margin-top: 5px; box-shadow: var(--shadow); }
+    .pedago { background: #fdf2f7; color: var(--muted); padding: 10px; border-radius: 10px; font-size: 11px; font-style: italic; margin-bottom: 10px; line-height: 1.4; }
+
+    .btn-main { display: inline-block; width: 100%; padding: 12px; border-radius: 12px; border: none; font-weight: 800; font-size: 14px; cursor: pointer; transition: .2s ease; text-decoration: none; text-align: center; box-shadow: var(--shadow); }
+    .btn-accent { background: var(--accent); color: #fff; margin-top: 5px; }
+    .btn-accent:hover { filter: brightness(1.05); transform: translateY(-1px); }
 
     .contact-link { display: block; text-align: center; margin: 20px auto 5px; }
     a.cta-final { text-decoration: none; background: var(--accent); color: #fff; padding: 12px 16px; border-radius: 12px; font-weight: 800; display: inline-block; font-size: 14px; }
@@ -82,46 +90,52 @@
 <body>
   <div class="wrap">
     <h1>Mon Patrimoine Net</h1>
-    <p class="intro">Faites l'inventaire de vos actifs et de vos dettes.</p>
+    <p class="intro">Faites l'inventaire de vos actifs et de vos dettes pour connaître votre richesse réelle.</p>
 
     <div class="grid">
       <div class="card">
         <div class="bar actif"></div>
         <h2><i data-lucide="plus-circle"></i> Vos Actifs</h2>
-        <div class="input-row"><label>Comptes bancaires</label><div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Comptes bancaires"></div></div>
-        <div class="input-row"><label>Livrets</label><div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Livrets"></div></div>
-        <div class="input-row"><label>Investissements</label><div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Investissements"></div></div>
-        <div class="input-row"><label>Immobilier</label><div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Immobilier"></div></div>
-        <div class="input-row"><label>Véhicules</label><div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Véhicules"></div></div>
-        <div class="input-row"><label>Autres actifs</label><div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Autres actifs"></div></div>
+        
+        <div class="input-row"><label><i data-lucide="wallet"></i> Comptes bancaires</label><div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Comptes bancaires"></div></div>
+        <div class="input-row"><label><i data-lucide="piggy-bank"></i> Livrets (LVA, LDDS, PEL, etc.)</label><div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Livrets"></div></div>
+        <div class="input-row"><label><i data-lucide="line-chart"></i> Investissements (CTO, PEA, AV, PER)</label><div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Investissements"></div></div>
+        <div class="input-row"><label><i data-lucide="coins"></i> Cryptomonnaie</label><div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Crypto"></div></div>
+        <div class="input-row"><label><i data-lucide="building-2"></i> Immobilier</label><div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Immobilier"></div></div>
+        <div class="input-row"><label><i data-lucide="briefcase"></i> Parts de société</label><div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Parts de société"></div></div>
+        <div class="input-row"><label><i data-lucide="car-front"></i> Véhicules</label><div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Véhicules"></div></div>
+        <div class="input-row"><label><i data-lucide="gem"></i> Objets de valeur</label><div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Objets de valeur"></div></div>
+        <div class="input-row"><label><i data-lucide="plus"></i> Autres actifs</label><div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Autres actifs"></div></div>
       </div>
 
-      <div style="display: flex; flex-direction: column; gap: 16px;">
+      <div class="col-right">
         <div class="card">
           <div class="bar dette"></div>
           <h2><i data-lucide="minus-circle"></i> Vos Dettes</h2>
-          <div class="input-row"><label>Crédit immobilier</label><div class="input-field"><span>€</span><input type="number" class="d-in" data-n="Crédit immobilier"></div></div>
-          <div class="input-row"><label>Crédit conso</label><div class="input-field"><span>€</span><input type="number" class="d-in" data-n="Crédit conso"></div></div>
-          <div class="input-row"><label>Autres dettes</label><div class="input-field"><span>€</span><input type="number" class="d-in" data-n="Autres dettes"></div></div>
+          <div class="input-row"><label><i data-lucide="home"></i> Crédit immobilier (Restant dû)</label><div class="input-field"><span>€</span><input type="number" class="d-in" data-n="Crédit immobilier"></div></div>
+          <div class="input-row"><label><i data-lucide="credit-card"></i> Crédit conso</label><div class="input-field"><span>€</span><input type="number" class="d-in" data-n="Crédit conso"></div></div>
+          <div class="input-row"><label><i data-lucide="car"></i> Crédit auto</label><div class="input-field"><span>€</span><input type="number" class="d-in" data-n="Crédit auto"></div></div>
+          <div class="input-row"><label><i data-lucide="alert-circle"></i> Autres dettes</label><div class="input-field"><span>€</span><input type="number" class="d-in" data-n="Autres dettes"></div></div>
         </div>
 
         <div class="card result-box">
           <div class="bar net"></div>
-          <h2>Votre Patrimoine NET</h2>
+          <h2><i data-lucide="pie-chart"></i> Votre Patrimoine NET</h2>
           <div class="net-value ok" id="vNet">0 €</div>
           <div class="summary">
             <div><small>Brut</small><b id="vBrut">0 €</b></div>
             <div><small>Dettes</small><b id="vDette" class="warn">0 €</b></div>
           </div>
+          <p class="pedago">Le brut = actifs avant emprunts.<br>Le net = ce qui vous appartient vraiment.</p>
           
           <button class="btn-main btn-accent btn-pdf" onclick="exportPDF()">Exporter en PDF</button>
-          <button class="btn-main btn-mobile" onclick="copyBilan()">Copier mon bilan (Texte)</button>
           
-          <button style="background:none; border:none; color:var(--muted); font-size:10px; cursor:pointer; margin-top:10px;" onclick="location.reload()">Réinitialiser</button>
+          <button style="background:none; border:none; color:var(--muted); font-size:10px; cursor:pointer; margin-top:10px; font-weight:600;" onclick="location.reload()">Réinitialiser les champs</button>
         </div>
       </div>
     </div>
-    <div class="contact-link"><a href="https://ig.me/m/secrets_de_banquiere" target="_blank" class="cta-final">Contactez‑moi</a></div>
+
+    <div class="contact-link"><a href="https://ig.me/m/secrets_de_banquiere" target="_blank" class="cta-final">Contactez‑moi pour aller plus loin</a></div>
     <div class="ig"><a href="https://www.instagram.com/secrets_de_banquiere/" target="_blank">@secrets_de_banquiere</a></div>
   </div>
 
@@ -129,22 +143,21 @@
     lucide.createIcons();
     const aIn = document.querySelectorAll('.a-in');
     const dIn = document.querySelectorAll('.d-in');
+
     function f(n) { return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(n); }
 
     function calc() {
       let b=0, d=0;
       aIn.forEach(i => b += Number(i.value)||0);
       dIn.forEach(i => d += Number(i.value)||0);
-      vBrut.innerText = f(b); vDette.innerText = f(d); vNet.innerText = f(b-d);
-      vNet.className = 'net-value ' + (b-d>=0?'ok':'warn');
+      let n = b - d;
+      vBrut.innerText = f(b);
+      vDette.innerText = f(d);
+      vNet.innerText = f(n);
+      vNet.className = 'net-value ' + (n>=0?'ok':'warn');
     }
-    [...aIn, ...dIn].forEach(i => i.addEventListener('input', calc));
 
-    function copyBilan() {
-      let t = `MON BILAN PATRIMOINE\nNET : ${vNet.innerText}\nBrut : ${vBrut.innerText}\nDettes : ${vDette.innerText}\n\nOptimisez vos finances : https://theleme.netlify.app/`;
-      navigator.clipboard.writeText(t);
-      alert("Bilan copié !");
-    }
+    [...aIn, ...dIn].forEach(i => i.addEventListener('input', calc));
 
     function exportPDF() {
       const date = new Date().toLocaleDateString('fr-FR');
@@ -152,27 +165,45 @@
         <div style="font-family:sans-serif; padding:30px; color:#17151f;">
           <center>
             <h1 style="color:#ef5da8; margin:0;">Bilan de Patrimoine</h1>
-            <p style="color:#68657a; font-size:12px;">${date}</p>
+            <p style="color:#68657a; font-size:12px;">${date} • Secrets de Banquière</p>
             <div style="background:#fff5f9; padding:20px; border-radius:15px; border:1px solid #f0e4ef; margin:20px 0;">
                 <p style="font-size:10px; text-transform:uppercase; margin:0;">Patrimoine Net Total</p>
                 <h2 style="font-size:32px; color:${vNet.classList.contains('ok')?'#0f9d58':'#d93025'}; margin:10px 0;">${vNet.innerText}</h2>
-                <p>Brut: ${vBrut.innerText} | Dettes: ${vDette.innerText}</p>
+                <p style="border-top:1px dashed #ccc; padding-top:10px; font-size:12px;">
+                    Brut: <b>${vBrut.innerText}</b> | Dettes: <b>${vDette.innerText}</b>
+                </p>
             </div>
           </center>
-          <div style="margin-top:30px; text-align:center;">
-            <a href="https://theleme.netlify.app/" style="display:inline-block; padding:15px 30px; background:#ef5da8; color:#ffffff; border-radius:12px; text-decoration:none; font-size:14px; font-weight:bold; box-shadow: 0 4px 10px rgba(239, 93, 168, 0.3);">
-              DÉCOUVRIR LA MÉTHODE 5/15 →
+          <div style="display:flex; gap:20px;">
+            <div style="flex:1;">
+                <h3 style="color:#ef5da8; border-bottom:1px solid #eee; font-size:14px;">ACTIFS</h3>
+                <table width="100%" style="font-size:11px;">`;
+      
+      aIn.forEach(i => { if(i.value > 0) pdfContent += `<tr><td style="padding:4px 0;">${i.dataset.n}</td><td align="right"><b>${f(i.value)}</b></td></tr>`; });
+
+      pdfContent += `</table></div><div style="flex:1;">
+                <h3 style="color:#ef5da8; border-bottom:1px solid #eee; font-size:14px;">DETTES</h3>
+                <table width="100%" style="font-size:11px;">`;
+
+      dIn.forEach(i => { if(i.value > 0) pdfContent += `<tr><td style="padding:4px 0;">${i.dataset.n}</td><td align="right"><b>${f(i.value)}</b></td></tr>`; });
+
+      pdfContent += `</table></div></div>
+          
+          <div style="margin-top:40px; text-align:center;">
+            <a href="https://theleme.netlify.app/" style="display:inline-block; background-color:#ef5da8; color:#ffffff; padding:15px 25px; border-radius:12px; text-decoration:none; font-weight:800; font-size:14px;">
+              OPTIMISER MON PATRIMOINE →
             </a>
-            <p style="font-size:10px; color:#68657a; margin-top:10px;">Cliquez sur le bouton pour optimiser votre patrimoine</p>
           </div>
         </div>`;
 
-      html2pdf().from(pdfContent).set({
+      const opt = {
         margin: 10,
         filename: `Patrimoine_${date}.pdf`,
         html2canvas: { scale: 2 },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-      }).save();
+      };
+
+      html2pdf().from(pdfContent).set(opt).save();
     }
   </script>
 </body>
