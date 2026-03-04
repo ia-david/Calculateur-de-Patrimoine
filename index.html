@@ -196,13 +196,17 @@
 
     function exportPDF() {
       const date = new Date().toLocaleDateString('fr-FR');
-      const isPositive = !vNet.classList.contains('warn');
-      const colorNet = isPositive ? '#0f9d58' : '#d93025';
+      const valNet = vNet.innerText;
+      const colorNet = vNet.classList.contains('ok') ? '#0f9d58' : '#d93025';
       
       const element = document.createElement('div');
-      element.style.padding = "20px";
+      // On le rend invisible mais présent dans le DOM pour le moteur PDF
+      element.style.position = 'fixed';
+      element.style.left = '-9999px';
+      element.style.top = '0';
       element.style.width = "550px"; 
       element.style.background = "#ffffff";
+      element.style.padding = "20px";
       
       let tableActifs = "";
       aIn.forEach(i => { 
@@ -227,7 +231,7 @@
 
           <div style="background-color:#fff5f9; border:1px solid #f0e4ef; border-radius:10px; padding:20px; margin-bottom:20px; text-align:center;">
             <div style="font-size:10px; color:#666; text-transform:uppercase; font-weight:bold;">Patrimoine Net Total</div>
-            <div style="font-size:36px; font-weight:bold; color:${colorNet}; margin:10px 0; text-align:center; width:100%;">${vNet.innerText}</div>
+            <div style="font-size:36px; font-weight:bold; color:${colorNet}; margin:10px 0; text-align:center; width:100%;">${valNet}</div>
             
             <table width="100%" style="border-top:1px dashed #ccc; margin-top:10px;">
               <tr>
@@ -264,19 +268,19 @@
         </div>
       `;
 
+      document.body.appendChild(element); // Important pour l'ouverture sur mobile
+
       const opt = {
         margin: 10,
         filename: `Patrimoine_${date.replace(/\//g,'-')}.pdf`,
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { 
-          scale: 2, 
-          useCORS: true, 
-          width: 580 
-        },
+        html2canvas: { scale: 2, useCORS: true, letterRendering: true },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
       };
 
-      html2pdf().set(opt).from(element).save();
+      html2pdf().set(opt).from(element).save().then(() => {
+        document.body.removeChild(element); // On nettoie après l'export
+      });
     }
   </script>
 </body>
