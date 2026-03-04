@@ -31,42 +31,55 @@
 
     h1 { font-size: 24px; font-weight: 800; margin: 22px 0 6px; text-align: center; }
     p.intro { color: var(--muted); font-size: 13px; text-align: center; margin-bottom: 24px; }
-    .wrap { max-width: 1000px; margin: 0 auto; padding: 0 16px 20px; }
-    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: stretch; }
 
-    /* --- LOGIQUE DES BOUTONS --- */
-    .btn-mobile-only { display: none; background: #17151f !important; color: white !important; }
+    .wrap { max-width: 1000px; margin: 0 auto; padding: 0 16px 20px; }
     
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: stretch; }
+    
+    /* GESTION MOBILE : Masquer le bouton PDF */
     @media (max-width: 850px) { 
       .grid { grid-template-columns: 1fr; }
       .btn-pdf { display: none !important; } 
-      .btn-mobile-only { display: inline-block !important; }
     }
 
-    .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow); padding: 18px; position: relative; overflow: hidden; display: flex; flex-direction: column; height: 100%; }
+    .card { 
+      background: var(--card); border: 1px solid var(--border); border-radius: 16px; 
+      box-shadow: var(--shadow); padding: 18px; position: relative; overflow: hidden;
+      display: flex; flex-direction: column; height: 100%;
+    }
     .bar { height: 5px; width: 100%; position: absolute; top: 0; left: 0; }
     .bar.actif { background: var(--c-actif); }
     .bar.dette { background: var(--c-dette); }
     .bar.net { background: var(--c-net); }
+    
     h2 { font-size: 16px; margin: 6px 0 18px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 8px; text-transform: none; text-align: center; }
     h2 i { width: 14px; height: 14px; stroke-width: 2.5px; }
+
     .input-row { margin-bottom: 12px; }
     .input-row label { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 800; color: var(--muted); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.3px; }
+    .input-row i { color: #a28abf; width: 10px; height: 10px; stroke-width: 2.5px; }
+    
     .input-field { display: flex; align-items: center; gap: 8px; border: 1px solid var(--border); border-radius: 10px; padding: 8px 12px; background: #fff; box-shadow: var(--shadow); }
     .input-field span { color: #a28abf; font-weight: 600; font-size: 14px; }
     .input-field input { border: 0; outline: 0; width: 100%; font-size: 14px; font-weight: 700; background: transparent; }
+
     .col-right { display: flex; flex-direction: column; gap: 16px; }
+
     .result-box { text-align: center; }
     .net-value { font-size: 34px; font-weight: 800; margin: 10px 0; }
     .summary { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 12px 0; border-top: 1px dashed var(--border); padding-top: 12px; }
     .summary b { display: block; font-size: 15px; }
     .summary small { font-size: 9px; text-transform: uppercase; color: var(--muted); font-weight: 800; }
+
     .pedago { background: #fdf2f7; color: var(--muted); padding: 10px; border-radius: 10px; font-size: 11px; font-style: italic; margin-bottom: 10px; line-height: 1.4; }
+
     .btn-main { display: inline-block; width: 100%; padding: 12px; border-radius: 12px; border: none; font-weight: 800; font-size: 14px; cursor: pointer; transition: .2s ease; text-decoration: none; text-align: center; box-shadow: var(--shadow); }
     .btn-accent { background: var(--accent); color: #fff; margin-top: 5px; }
     .btn-accent:hover { filter: brightness(1.05); transform: translateY(-1px); }
+
     .contact-link { display: block; text-align: center; margin: 20px auto 5px; }
     a.cta-final { text-decoration: none; background: var(--accent); color: #fff; padding: 12px 16px; border-radius: 12px; font-weight: 800; display: inline-block; font-size: 14px; }
+
     .ok { color: var(--ok); }
     .warn { color: var(--warn); }
     .ig { text-align: center; font-size: 11px; margin-top: 10px; }
@@ -83,25 +96,65 @@
       <div class="card">
         <div class="bar actif"></div>
         <h2><i data-lucide="plus-circle"></i> Vos Actifs</h2>
-        <div class="input-row"><label><i data-lucide="wallet"></i> Comptes bancaires</label><div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Comptes bancaires"></div></div>
-        <div class="input-row"><label><i data-lucide="piggy-bank"></i> Livrets</label><div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Livrets"></div></div>
-        <div class="input-row"><label><i data-lucide="line-chart"></i> Investissements</label><div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Investissements"></div></div>
-        <div class="input-row"><label><i data-lucide="coins"></i> Cryptomonnaie</label><div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Crypto"></div></div>
-        <div class="input-row"><label><i data-lucide="building-2"></i> Immobilier</label><div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Immobilier"></div></div>
-        <div class="input-row"><label><i data-lucide="briefcase"></i> Parts de société</label><div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Parts de société"></div></div>
-        <div class="input-row"><label><i data-lucide="car-front"></i> Véhicules</label><div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Véhicules"></div></div>
-        <div class="input-row"><label><i data-lucide="gem"></i> Objets de valeur</label><div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Objets de valeur"></div></div>
-        <div class="input-row"><label><i data-lucide="plus"></i> Autres actifs</label><div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Autres actifs"></div></div>
+        
+        <div class="input-row">
+          <label><i data-lucide="wallet"></i> Comptes bancaires</label>
+          <div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Comptes bancaires"></div>
+        </div>
+        <div class="input-row">
+          <label><i data-lucide="piggy-bank"></i> Livrets (LVA, LDDS, PEL, etc.)</label>
+          <div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Livrets"></div>
+        </div>
+        <div class="input-row">
+          <label><i data-lucide="line-chart"></i> Investissements (CTO, PEA, AV, PER)</label>
+          <div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Investissements"></div>
+        </div>
+        <div class="input-row">
+          <label><i data-lucide="coins"></i> Cryptomonnaie</label>
+          <div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Crypto"></div>
+        </div>
+        <div class="input-row">
+          <label><i data-lucide="building-2"></i> Immobilier</label>
+          <div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Immobilier"></div>
+        </div>
+        <div class="input-row">
+          <label><i data-lucide="briefcase"></i> Parts de société</label>
+          <div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Parts de société"></div>
+        </div>
+        <div class="input-row">
+          <label><i data-lucide="car-front"></i> Véhicules</label>
+          <div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Véhicules"></div>
+        </div>
+        <div class="input-row">
+          <label><i data-lucide="gem"></i> Objets de valeur</label>
+          <div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Objets de valeur"></div>
+        </div>
+        <div class="input-row">
+          <label><i data-lucide="plus"></i> Autres actifs</label>
+          <div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Autres actifs"></div>
+        </div>
       </div>
 
       <div class="col-right">
         <div class="card">
           <div class="bar dette"></div>
           <h2><i data-lucide="minus-circle"></i> Vos Dettes</h2>
-          <div class="input-row"><label><i data-lucide="home"></i> Crédit immobilier</label><div class="input-field"><span>€</span><input type="number" class="d-in" data-n="Crédit immobilier"></div></div>
-          <div class="input-row"><label><i data-lucide="credit-card"></i> Crédit conso</label><div class="input-field"><span>€</span><input type="number" class="d-in" data-n="Crédit conso"></div></div>
-          <div class="input-row"><label><i data-lucide="car"></i> Crédit auto</label><div class="input-field"><span>€</span><input type="number" class="d-in" data-n="Crédit auto"></div></div>
-          <div class="input-row"><label><i data-lucide="alert-circle"></i> Autres dettes</label><div class="input-field"><span>€</span><input type="number" class="d-in" data-n="Autres dettes"></div></div>
+          <div class="input-row">
+            <label><i data-lucide="home"></i> Crédit immobilier (Restant dû)</label>
+            <div class="input-field"><span>€</span><input type="number" class="d-in" data-n="Crédit immobilier"></div>
+          </div>
+          <div class="input-row">
+            <label><i data-lucide="credit-card"></i> Crédit conso</label>
+            <div class="input-field"><span>€</span><input type="number" class="d-in" data-n="Crédit conso"></div>
+          </div>
+          <div class="input-row">
+            <label><i data-lucide="car"></i> Crédit auto</label>
+            <div class="input-field"><span>€</span><input type="number" class="d-in" data-n="Crédit auto"></div>
+          </div>
+          <div class="input-row">
+            <label><i data-lucide="alert-circle"></i> Autres dettes</label>
+            <div class="input-field"><span>€</span><input type="number" class="d-in" data-n="Autres dettes"></div>
+          </div>
         </div>
 
         <div class="card result-box">
@@ -115,15 +168,16 @@
           <p class="pedago">Le patrimoine net = ce qui vous appartient vraiment.</p>
           
           <button class="btn-main btn-accent btn-pdf" onclick="exportPDF()">Exporter en PDF</button>
-
-          <button class="btn-main btn-mobile-only" onclick="showTextOnly()">Afficher mon bilan (Texte)</button>
           
           <button style="background:none; border:none; color:var(--muted); font-size:10px; cursor:pointer; margin-top:10px; font-weight:600;" onclick="location.reload()">Réinitialiser les champs</button>
         </div>
       </div>
     </div>
 
-    <div class="contact-link"><a href="https://ig.me/m/secrets_de_banquiere" target="_blank" class="cta-final">Contactez‑moi pour aller plus loin</a></div>
+    <div class="contact-link">
+      <a href="https://ig.me/m/secrets_de_banquiere" target="_blank" class="cta-final">Contactez‑moi pour aller plus loin</a>
+    </div>
+
     <div class="ig"><a href="https://www.instagram.com/secrets_de_banquiere/" target="_blank">@secrets_de_banquiere</a></div>
   </div>
 
@@ -138,28 +192,15 @@
       let b=0, d=0;
       aIn.forEach(i => b += Number(i.value)||0);
       dIn.forEach(i => d += Number(i.value)||0);
-      vBrut.innerText = f(b); vDette.innerText = f(d); vNet.innerText = f(b - d);
-      vNet.className = 'net-value ' + (b-d>=0?'ok':'warn');
+      let n = b - d;
+      vBrut.innerText = f(b);
+      vDette.innerText = f(d);
+      vNet.innerText = f(n);
+      vNet.className = 'net-value ' + (n>=0?'ok':'warn');
     }
 
     [...aIn, ...dIn].forEach(i => i.addEventListener('input', calc));
 
-    // FONCTION IPHONE : TEXTE SIMPLE
-    function showTextOnly() {
-      let t = `MON BILAN PATRIMOINE\n\n`;
-      t += `Patrimoine Net Total : ${vNet.innerText}\n`;
-      t += `Patrimoine Brut : ${vBrut.innerText}\n`;
-      t += `Total Dettes : ${vDette.innerText}\n\n`;
-      t += `Détails Actifs :\n`;
-      aIn.forEach(i => { if(i.value > 0) t += `- ${i.dataset.n} : ${f(i.value)}\n`; });
-      t += `\nDétails Dettes :\n`;
-      dIn.forEach(i => { if(i.value > 0) t += `- ${i.dataset.n} : ${f(i.value)}\n`; });
-      t += `\nOptimisez vos finances : https://theleme.netlify.app/`;
-      
-      alert(t);
-    }
-
-    // FONCTION PC : PDF AVEC LIEN
     function exportPDF() {
       const date = new Date().toLocaleDateString('fr-FR');
       let pdfContent = `
@@ -189,20 +230,19 @@
       dIn.forEach(i => { if(i.value > 0) pdfContent += `<tr><td style="padding:4px 0;">${i.dataset.n}</td><td align="right"><b>${f(i.value)}</b></td></tr>`; });
 
       pdfContent += `</table></div></div>
-          
-          <div style="margin-top:30px; text-align:center;">
-            <a href="https://theleme.netlify.app/" style="display:block; padding:15px; background:#17151f; color:#ffffff; border-radius:10px; text-decoration:none; font-size:12px; font-weight:bold;">
-              Optimisez vos finances avec @secrets_de_banquiere →
-            </a>
+          <div style="margin-top:30px; padding:15px; background:#17151f; color:#fff; border-radius:10px; text-align:center; font-size:12px;">
+            Optimisez vos finances avec @secrets_de_banquiere
           </div>
         </div>`;
 
-      html2pdf().from(pdfContent).set({
+      const opt = {
         margin: 10,
         filename: `Patrimoine_${date}.pdf`,
         html2canvas: { scale: 2 },
-        jsPDF: { unit: 'mm', format: 'a4' }
-      }).save();
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+
+      html2pdf().from(pdfContent).set(opt).save();
     }
   </script>
 </body>
