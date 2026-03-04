@@ -2,256 +2,42 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-  <title>Secrets de banquière - Calculateur de Patrimoine Net</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-  
-  <script src="https://unpkg.com/lucide@latest"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Test Debug PDF</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
-  <style>
-    :root {
-      --bg: #fff5f9; --card: #ffffff; --text: #17151f; --muted: #68657a;
-      --accent: #ef5da8; --border: #f0e4ef; --ok: #0f9d58; --warn: #d93025;
-      --shadow: 0 10px 30px rgba(35, 10, 30, .06); --shadow-strong: 0 14px 34px rgba(35, 10, 30, .10);
-      --font: 'Inter', sans-serif;
-      --c-actif: #bafce1; --c-dette: #ff9ca6; --c-net: #d7c3ff;
-    }
-
-    * { box-sizing: border-box; font-family: var(--font); }
-    html, body {
-      margin: 0; color: var(--text);
-      background: radial-gradient(1200px 400px at 70% -200px,#ffd3e9 0%,transparent 70%),
-                  radial-gradient(800px 300px at 0% 0%,#ffe5f1 0%,transparent 60%),
-                  linear-gradient(180deg,#fff 0%,#ffe9f1 60%,#fff6fb 100%);
-      background-attachment: fixed; min-height: 100vh;
-    }
-
-    h1 { font-size: 24px; font-weight: 800; margin: 22px 0 6px; text-align: center; }
-    p.intro { color: var(--muted); font-size: 13px; text-align: center; margin-bottom: 24px; }
-
-    .wrap { max-width: 1000px; margin: 0 auto; padding: 0 16px 20px; }
-    
-    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: stretch; }
-    @media (max-width: 850px) { .grid { grid-template-columns: 1fr; } }
-
-    .card { 
-      background: var(--card); border: 1px solid var(--border); border-radius: 16px; 
-      box-shadow: var(--shadow); padding: 18px; position: relative; overflow: hidden;
-      display: flex; flex-direction: column; height: 100%;
-    }
-    .bar { height: 5px; width: 100%; position: absolute; top: 0; left: 0; }
-    .bar.actif { background: var(--c-actif); }
-    .bar.dette { background: var(--c-dette); }
-    .bar.net { background: var(--c-net); }
-    
-    h2 { font-size: 16px; margin: 6px 0 18px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 8px; text-transform: none; text-align: center; }
-    h2 i { width: 14px; height: 14px; stroke-width: 2.5px; }
-
-    .input-row { margin-bottom: 12px; }
-    .input-row label { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 800; color: var(--muted); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.3px; }
-    .input-row i { color: #a28abf; width: 10px; height: 10px; stroke-width: 2.5px; }
-    
-    .input-field { display: flex; align-items: center; gap: 8px; border: 1px solid var(--border); border-radius: 10px; padding: 8px 12px; background: #fff; box-shadow: var(--shadow); }
-    .input-field span { color: #a28abf; font-weight: 600; font-size: 14px; }
-    .input-field input { border: 0; outline: 0; width: 100%; font-size: 14px; font-weight: 700; background: transparent; }
-
-    .col-right { display: flex; flex-direction: column; gap: 16px; }
-
-    .result-box { text-align: center; }
-    .net-value { font-size: 34px; font-weight: 800; margin: 10px 0; }
-    .summary { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 12px 0; border-top: 1px dashed var(--border); padding-top: 12px; }
-    .summary b { display: block; font-size: 15px; }
-    .summary small { font-size: 9px; text-transform: uppercase; color: var(--muted); font-weight: 800; }
-
-    .pedago { background: #fdf2f7; color: var(--muted); padding: 10px; border-radius: 10px; font-size: 11px; font-style: italic; margin-bottom: 10px; line-height: 1.4; }
-
-    .btn-main { display: inline-block; width: 100%; padding: 12px; border-radius: 12px; border: none; font-weight: 800; font-size: 14px; cursor: pointer; transition: .2s ease; text-decoration: none; text-align: center; box-shadow: var(--shadow); }
-    .btn-accent { background: var(--accent); color: #fff; margin-top: 5px; }
-    .btn-accent:hover { filter: brightness(1.05); transform: translateY(-1px); }
-
-    .contact-link { display: block; text-align: center; margin: 20px auto 5px; }
-    a.cta-final { text-decoration: none; background: var(--accent); color: #fff; padding: 12px 16px; border-radius: 12px; font-weight: 800; display: inline-block; font-size: 14px; }
-
-    .ok { color: var(--ok); }
-    .warn { color: var(--warn); }
-    .ig { text-align: center; font-size: 11px; margin-top: 10px; }
-    .ig a { color: var(--text); text-decoration: none; font-weight: 700; }
-  </style>
 </head>
-
 <body>
-  <div class="wrap">
-    <h1>Mon Patrimoine Net</h1>
-    <p class="intro">Faites l'inventaire de vos actifs et de vos dettes pour connaître votre richesse réelle.</p>
 
-    <div class="grid">
-      <div class="card">
-        <div class="bar actif"></div>
-        <h2><i data-lucide="plus-circle"></i> Vos Actifs</h2>
-        
-        <div class="input-row">
-          <label><i data-lucide="wallet"></i> Comptes bancaires</label>
-          <div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Comptes bancaires"></div>
-        </div>
-        <div class="input-row">
-          <label><i data-lucide="piggy-bank"></i> Livrets (LVA, LDDS, PEL, etc.)</label>
-          <div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Livrets"></div>
-        </div>
-        <div class="input-row">
-          <label><i data-lucide="line-chart"></i> Investissements (CTO, PEA, AV, PER)</label>
-          <div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Investissements"></div>
-        </div>
-        <div class="input-row">
-          <label><i data-lucide="coins"></i> Cryptomonnaie</label>
-          <div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Crypto"></div>
-        </div>
-        <div class="input-row">
-          <label><i data-lucide="building-2"></i> Immobilier</label>
-          <div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Immobilier"></div>
-        </div>
-        <div class="input-row">
-          <label><i data-lucide="briefcase"></i> Parts de société</label>
-          <div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Parts de société"></div>
-        </div>
-        <div class="input-row">
-          <label><i data-lucide="car-front"></i> Véhicules</label>
-          <div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Véhicules"></div>
-        </div>
-        <div class="input-row">
-          <label><i data-lucide="gem"></i> Objets de valeur</label>
-          <div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Objets de valeur"></div>
-        </div>
-        <div class="input-row">
-          <label><i data-lucide="plus"></i> Autres actifs</label>
-          <div class="input-field"><span>€</span><input type="number" class="a-in" data-n="Autres actifs"></div>
-        </div>
-      </div>
-
-      <div class="col-right">
-        <div class="card">
-          <div class="bar d-in-bar dette"></div>
-          <h2><i data-lucide="minus-circle"></i> Vos Dettes</h2>
-          <div class="input-row">
-            <label><i data-lucide="home"></i> Crédit immobilier (Restant dû)</label>
-            <div class="input-field"><span>€</span><input type="number" class="d-in" data-n="Crédit immobilier"></div>
-          </div>
-          <div class="input-row">
-            <label><i data-lucide="credit-card"></i> Crédit conso</label>
-            <div class="input-field"><span>€</span><input type="number" class="d-in" data-n="Crédit conso"></div>
-          </div>
-          <div class="input-row">
-            <label><i data-lucide="car"></i> Crédit auto</label>
-            <div class="input-field"><span>€</span><input type="number" class="d-in" data-n="Crédit auto"></div>
-          </div>
-          <div class="input-row">
-            <label><i data-lucide="alert-circle"></i> Autres dettes</label>
-            <div class="input-field"><span>€</span><input type="number" class="d-in" data-n="Autres dettes"></div>
-          </div>
-        </div>
-
-        <div class="card result-box">
-          <div class="bar net"></div>
-          <h2><i data-lucide="pie-chart"></i> Votre Patrimoine NET</h2>
-          <div class="net-value ok" id="vNet">0 €</div>
-          <div class="summary">
-            <div><small>Brut</small><b id="vBrut">0 €</b></div>
-            <div><small>Dettes</small><b id="vDette" class="warn">0 €</b></div>
-          </div>
-          <p class="pedago">Le patrimoine brut = actifs avant emprunts.<br>Le patrimoine net = ce qui vous appartient vraiment.</p>
-          <button class="btn-main btn-accent" onclick="exportPDF()">Exporter en PDF</button>
-          <button style="background:none; border:none; color:var(--muted); font-size:10px; cursor:pointer; margin-top:10px; font-weight:600;" onclick="location.reload()">Réinitialiser les champs</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="contact-link">
-      <a href="https://ig.me/m/secrets_de_banquiere" target="_blank" class="cta-final">Contactez‑moi pour aller plus loin</a>
-    </div>
-
-    <div class="ig"><a href="https://www.instagram.com/secrets_de_banquiere/" target="_blank">@secrets_de_banquiere</a></div>
+  <div id="zone-test" style="padding: 20px; border: 2px solid pink; text-align: center;">
+    <h1>HELLO WORLD</h1>
+    <p>Ceci est un test de debug pour iPhone.</p>
+    <p>Date : <span id="date-test"></span></p>
   </div>
 
+  <br>
+
+  <button onclick="testerPDF()" style="padding: 20px; width: 100%; background: #ef5da8; color: white; font-size: 20px; border-radius: 10px;">
+    CLIQUER ICI POUR TESTER LE PDF
+  </button>
+
   <script>
-    lucide.createIcons();
-    const aIn = document.querySelectorAll('.a-in');
-    const dIn = document.querySelectorAll('.d-in');
+    document.getElementById('date-test').innerText = new Date().toLocaleString();
 
-    function f(n) { return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(n); }
-
-    function calc() {
-      let b=0, d=0;
-      aIn.forEach(i => b += Number(i.value)||0);
-      dIn.forEach(i => d += Number(i.value)||0);
-      let n = b - d;
-      vBrut.innerText = f(b);
-      vDette.innerText = f(d);
-      vNet.innerText = f(n);
-      vNet.className = 'net-value ' + (n>=0?'ok':'warn');
-    }
-
-    [...aIn, ...dIn].forEach(i => i.addEventListener('input', calc));
-
-    function exportPDF() {
-      const date = new Date().toLocaleDateString('fr-FR');
-      const valNet = vNet.innerText;
-      const colorNet = vNet.classList.contains('ok') ? '#0f9d58' : '#d93025';
+    function testerPDF() {
+      const element = document.getElementById('zone-test');
       
-      // On crée un HTML simple et propre
-      let listActifs = "";
-      aIn.forEach(i => { if(Number(i.value) > 0) listActifs += `<tr><td style="padding:4px; border-bottom:1px solid #eee;">• ${i.dataset.n}</td><td style="text-align:right; font-weight:bold; border-bottom:1px solid #eee;">${f(i.value)}</td></tr>`; });
-      
-      let listDettes = "";
-      dIn.forEach(i => { if(Number(i.value) > 0) listDettes += `<tr><td style="padding:4px; border-bottom:1px solid #eee;">• ${i.dataset.n}</td><td style="text-align:right; font-weight:bold; border-bottom:1px solid #eee;">${f(i.value)}</td></tr>`; });
-
-      const pdfHtml = `
-        <div style="font-family: Arial, sans-serif; color: #17151f; padding: 20px;">
-          <center>
-            <h1 style="color:#ef5da8; margin-bottom:5px;">Bilan Patrimoine</h1>
-            <p style="color:#666; font-size:12px; margin-bottom:20px;">Secrets de Banquière - ${date}</p>
-            
-            <div style="background:#fff5f9; border:1px solid #f0e4ef; border-radius:10px; padding:20px; margin-bottom:20px;">
-              <small style="text-transform:uppercase; font-size:10px; font-weight:bold; color:#666;">Patrimoine Net Total</small>
-              <div style="font-size:32px; font-weight:800; color:${colorNet}; margin:10px 0;">${valNet}</div>
-              <div style="font-size:12px; border-top:1px dashed #ccc; padding-top:10px;">
-                Brut: <b>${vBrut.innerText}</b> | Dettes: <b style="color:#d93025;">${vDette.innerText}</b>
-              </div>
-            </div>
-          </center>
-
-          <table width="100%" style="font-size:12px;">
-            <tr>
-              <td width="48%" valign="top">
-                <h3 style="color:#ef5da8; border-bottom:2px solid #bafce1; padding-bottom:5px;">ACTIFS</h3>
-                <table width="100%">${listActifs || '<tr><td>Aucun</td></tr>'}</table>
-              </td>
-              <td width="4%"></td>
-              <td width="48%" valign="top">
-                <h3 style="color:#ef5da8; border-bottom:2px solid #ff9ca6; padding-bottom:5px;">DETTES</h3>
-                <table width="100%">${listDettes || '<tr><td>Aucune</td></tr>'}</table>
-              </td>
-            </tr>
-          </table>
-
-          <div style="margin-top:40px; text-align:center; background:#17151f; color:#fff; padding:15px; border-radius:8px;">
-            <p style="margin:0; font-size:12px;">Optimisez vos finances avec @secrets_de_banquiere</p>
-          </div>
-        </div>
-      `;
-
-      // CONFIGURATION PDF STANDARD SANS DOM APPEND (PLUS STABLE)
-      const opt = {
+      const options = {
         margin: 10,
-        filename: `Patrimoine_${date}.pdf`,
-        html2canvas: { scale: 2 },
+        filename: 'test-debug.pdf',
+        image: { type: 'jpeg', quality: 0.95 },
+        html2canvas: { scale: 1, useCORS: true }, // Echelle 1 pour être le plus léger possible
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
       };
 
-      // Exécution directe
-      html2pdf().from(pdfHtml).set(opt).save();
+      // On lance la génération
+      html2pdf().set(options).from(element).save();
     }
   </script>
+
 </body>
 </html>
