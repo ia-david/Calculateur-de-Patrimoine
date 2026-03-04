@@ -47,14 +47,11 @@
     .bar.dette { background: var(--c-dette); }
     .bar.net { background: var(--c-net); }
     
-    /* TITRES CENTRÉS */
     h2 { font-size: 16px; margin: 6px 0 18px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 8px; text-transform: none; text-align: center; }
     h2 i { width: 14px; height: 14px; stroke-width: 2.5px; }
 
     .input-row { margin-bottom: 12px; }
     .input-row label { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 800; color: var(--muted); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.3px; }
-    
-    /* Icônes de ligne discrètes */
     .input-row i { color: #a28abf; width: 10px; height: 10px; stroke-width: 2.5px; }
     
     .input-field { display: flex; align-items: center; gap: 8px; border: 1px solid var(--border); border-radius: 10px; padding: 8px 12px; background: #fff; box-shadow: var(--shadow); }
@@ -135,7 +132,7 @@
 
       <div class="col-right">
         <div class="card">
-          <div class="bar dette"></div>
+          <div class="bar d-in-bar dette"></div>
           <h2><i data-lucide="minus-circle"></i> Vos Dettes</h2>
           <div class="input-row">
             <label><i data-lucide="home"></i> Crédit immobilier (Restant dû)</label>
@@ -158,18 +155,13 @@
         <div class="card result-box">
           <div class="bar net"></div>
           <h2><i data-lucide="pie-chart"></i> Votre Patrimoine NET</h2>
-          
           <div class="net-value ok" id="vNet">0 €</div>
-          
           <div class="summary">
             <div><small>Brut</small><b id="vBrut">0 €</b></div>
             <div><small>Dettes</small><b id="vDette" class="warn">0 €</b></div>
           </div>
-
           <p class="pedago">Le patrimoine brut = actifs avant emprunts.<br>Le patrimoine net = ce qui vous appartient vraiment.</p>
-
           <button class="btn-main btn-accent" onclick="exportPDF()">Exporter en PDF</button>
-          
           <button style="background:none; border:none; color:var(--muted); font-size:10px; cursor:pointer; margin-top:10px; font-weight:600;" onclick="location.reload()">Réinitialiser les champs</button>
         </div>
       </div>
@@ -182,7 +174,7 @@
     <div class="ig"><a href="https://www.instagram.com/secrets_de_banquiere/" target="_blank">@secrets_de_banquiere</a></div>
   </div>
 
-<script>
+  <script>
     lucide.createIcons();
     const aIn = document.querySelectorAll('.a-in');
     const dIn = document.querySelectorAll('.d-in');
@@ -204,72 +196,87 @@
 
     function exportPDF() {
       const date = new Date().toLocaleDateString('fr-FR');
-      const colorNet = vNet.classList.contains('ok') ? '#0f9d58' : '#d93025';
+      const isPositive = !vNet.classList.contains('warn');
+      const colorNet = isPositive ? '#0f9d58' : '#d93025';
       
-      // Construction du HTML optimisé pour mobile et export PDF stable
-      let html = `
-        <div style="font-family:Arial, sans-serif; padding:20px; color:#17151f;">
-          <div style="text-align:center; margin-bottom: 20px;">
-            <h1 style="color:#ef5da8; margin:0; font-size:22px;">Bilan de Patrimoine</h1>
-            <p style="color:#68657a; font-size:12px; margin:5px 0;">Réalisé par <b>Secrets de Banquière</b> le ${date}</p>
+      const element = document.createElement('div');
+      element.style.padding = "20px";
+      element.style.width = "550px"; 
+      element.style.background = "#ffffff";
+      
+      let tableActifs = "";
+      aIn.forEach(i => { 
+        if(Number(i.value) > 0) {
+          tableActifs += `<tr><td style="padding:5px; color:#666; border-bottom:1px solid #f9f9f9;">• ${i.dataset.n}</td><td style="text-align:right; font-weight:bold; border-bottom:1px solid #f9f9f9;">${f(i.value)}</td></tr>`;
+        }
+      });
+
+      let tableDettes = "";
+      dIn.forEach(i => { 
+        if(Number(i.value) > 0) {
+          tableDettes += `<tr><td style="padding:5px; color:#666; border-bottom:1px solid #f9f9f9;">• ${i.dataset.n}</td><td style="text-align:right; font-weight:bold; border-bottom:1px solid #f9f9f9;">${f(i.value)}</td></tr>`;
+        }
+      });
+
+      element.innerHTML = `
+        <div style="font-family:Arial, sans-serif;">
+          <div style="text-align:center; margin-bottom:20px;">
+            <h1 style="color:#ef5da8; font-size:24px; margin:0;">Bilan de Patrimoine</h1>
+            <p style="color:#666; font-size:12px;">Secrets de Banquière - ${date}</p>
           </div>
-          
-          <div style="background:#fff5f9; padding:20px; border-radius:12px; border:1px solid #f0e4ef; margin-bottom:25px; text-align:center;">
-            <p style="text-transform:uppercase; font-size:9px; letter-spacing:1px; margin:0; color:#68657a; font-weight:bold;">Patrimoine Net Total</p>
-            <div style="font-size:32px; font-weight:bold; margin:10px 0; color:${colorNet}; text-align:center; width:100%;">${vNet.innerText}</div>
+
+          <div style="background-color:#fff5f9; border:1px solid #f0e4ef; border-radius:10px; padding:20px; margin-bottom:20px; text-align:center;">
+            <div style="font-size:10px; color:#666; text-transform:uppercase; font-weight:bold;">Patrimoine Net Total</div>
+            <div style="font-size:36px; font-weight:bold; color:${colorNet}; margin:10px 0; text-align:center; width:100%;">${vNet.innerText}</div>
             
-            <table style="width:100%; border-top:1px dashed #f0e4ef; margin-top:10px; padding-top:10px;">
+            <table width="100%" style="border-top:1px dashed #ccc; margin-top:10px;">
               <tr>
-                <td style="width:50%; text-align:center;">
-                  <p style="font-size:9px; margin:0; color:#68657a">BRUT</p>
-                  <p style="font-weight:bold; margin:0; font-size:14px;">${vBrut.innerText}</p>
+                <td align="center" style="padding-top:10px; width:50%;">
+                  <div style="font-size:9px; color:#666;">BRUT</div>
+                  <div style="font-weight:bold;">${vBrut.innerText}</div>
                 </td>
-                <td style="width:50%; text-align:center;">
-                  <p style="font-size:9px; margin:0; color:#68657a">DETTES</p>
-                  <p style="font-weight:bold; margin:0; font-size:14px; color:#d93025;">${vDette.innerText}</p>
+                <td align="center" style="padding-top:10px; width:50%;">
+                  <div style="font-size:9px; color:#666;">DETTES</div>
+                  <div style="font-weight:bold; color:#d93025;">${vDette.innerText}</div>
                 </td>
               </tr>
             </table>
           </div>
 
-          <table style="width:100%;">
+          <table width="100%" cellspacing="0" cellpadding="0" style="table-layout: fixed;">
             <tr>
-              <td style="width:48%; vertical-align:top;">
-                <h3 style="font-size:12px; text-transform:uppercase; color:#ef5da8; border-bottom:1px solid #f0e4ef; padding-bottom:5px; text-align:center;">Vos Actifs</h3>
-                <table style="width:100%; font-size:11px;">`;
-      
-      aIn.forEach(i => { 
-        if(i.value > 0) html += `<tr><td style="padding:4px 0; color:#68657a">• ${i.dataset.n}</td><td style="text-align:right; font-weight:bold">${f(i.value)}</td></tr>`; 
-      });
-      
-      html += `</table></td>
-              <td style="width:4%;"></td>
-              <td style="width:48%; vertical-align:top;">
-                <h3 style="font-size:12px; text-transform:uppercase; color:#ef5da8; border-bottom:1px solid #f0e4ef; padding-bottom:5px; text-align:center;">Vos Dettes</h3>
-                <table style="width:100%; font-size:11px;">`;
-      
-      dIn.forEach(i => { 
-        if(i.value > 0) html += `<tr><td style="padding:4px 0; color:#68657a">• ${i.dataset.n}</td><td style="text-align:right; font-weight:bold">${f(i.value)}</td></tr>`; 
-      });
+              <td width="48%" valign="top">
+                <div style="font-size:12px; font-weight:bold; color:#ef5da8; border-bottom:2px solid #bafce1; margin-bottom:10px; padding-bottom:5px; text-align:center;">VOS ACTIFS</div>
+                <table width="100%" style="font-size:11px; border-collapse:collapse;">${tableActifs || '<tr><td style="color:#999;font-style:italic;text-align:center;">Aucun actif saisi</td></tr>'}</table>
+              </td>
+              <td width="4%"></td>
+              <td width="48%" valign="top">
+                <div style="font-size:12px; font-weight:bold; color:#ef5da8; border-bottom:2px solid #ff9ca6; margin-bottom:10px; padding-bottom:5px; text-align:center;">VOS DETTES</div>
+                <table width="100%" style="font-size:11px; border-collapse:collapse;">${tableDettes || '<tr><td style="color:#999;font-style:italic;text-align:center;">Aucune dette saisie</td></tr>'}</table>
+              </td>
+            </tr>
+          </table>
 
-      html += `</table></td></tr></table>
-          
-          <div style="margin-top:40px; padding:15px; background:#17151f; color:#fff; border-radius:12px; text-align:center;">
-            <p style="margin:0 0 8px 0; font-size:12px;">Optimisez vos finances avec ma méthode 5/15</p>
-            <a href="https://theleme.netlify.app/" style="color:#ef5da8; font-weight:bold; text-decoration:none; font-size:14px;">Clique ici pour découvrir la méthode →</a>
+          <div style="margin-top:40px; background-color:#17151f; color:#ffffff; padding:20px; border-radius:10px; text-align:center;">
+            <div style="font-size:13px; margin-bottom:10px;">Optimisez vos finances avec ma méthode 5/15</div>
+            <a href="https://theleme.netlify.app/" style="color:#ef5da8; font-weight:bold; font-size:15px; text-decoration:none;">Découvrir la méthode →</a>
           </div>
-        </div>`;
+        </div>
+      `;
 
-      // Options de capture optimisées pour éviter le décalage sur mobile
       const opt = {
         margin: 10,
-        filename: `Patrimoine_Net_${date}.pdf`,
+        filename: `Patrimoine_${date.replace(/\//g,'-')}.pdf`,
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true, letterRendering: true },
+        html2canvas: { 
+          scale: 2, 
+          useCORS: true, 
+          width: 580 
+        },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
       };
 
-      html2pdf().set(opt).from(html).save();
+      html2pdf().set(opt).from(element).save();
     }
   </script>
 </body>
